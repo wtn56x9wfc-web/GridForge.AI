@@ -7,7 +7,7 @@
   },
   "routes": [
     {
-      "src": "/api/generate",
+      "src": "/api/gene---rate",
       "methods": ["POST"],
       "dest": "/api/generate.js"
     }
