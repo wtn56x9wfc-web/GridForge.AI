@@ -6,9 +6,17 @@ module.exports = async function (req, res) {
   }
 
   try {
-    const { businessName, senderName, recipientName, industry, goal, tone, messageType, extraContext } = req.body;
+    const {
+      businessName,
+      senderName,
+      recipientName,
+      industry,
+      goal,
+      tone,
+      messageType,
+      extraContext
+    } = req.body;
 
-    // Build one single string for OpenAI input
     const prompt = `
 Generate a ${tone} ${messageType} outreach message.
 
@@ -20,7 +28,7 @@ Goal: ${goal}
 Extra Context: ${extraContext}
 
 Write a clean, natural outreach message they would realistically send.
-    `;
+`;
 
     const apiRes = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
@@ -36,13 +44,14 @@ Write a clean, natural outreach message they would realistically send.
 
     const json = await apiRes.json();
 
-    // Extract the model output safely
-    const output = json.output_text || json.output?.[0]?.content || JSON.stringify(json);
+    const output =
+      json.output_text ||
+      json.output?.[0]?.content ||
+      JSON.stringify(json, null, 2);
 
     return res.status(200).json({ output });
-
-  } catch (error) {
-    console.error("API ERROR:", error);
+  } catch (err) {
+    console.error("API ERROR:", err);
     return res.status(500).json({ error: "Server error" });
   }
 };
