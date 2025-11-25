@@ -1,12 +1,14 @@
 document.getElementById("generateBtn").addEventListener("click", async () => {
-  const businessName = document.getElementById("businessName").value.trim();
-  const senderName = document.getElementById("senderName").value.trim();
-  const recipientName = document.getElementById("recipientName").value.trim();
-  const industry = document.getElementById("industry").value.trim();
-  const goal = document.getElementById("goal").value.trim();
-  const tone = document.getElementById("tone").value;
-  const messageType = document.getElementById("messageType").value;
-  const extraContext = document.getElementById("extraContext").value.trim();
+  const body = {
+    businessName: document.getElementById("businessName").value.trim(),
+    senderName: document.getElementById("senderName").value.trim(),
+    recipientName: document.getElementById("recipientName").value.trim(),
+    industry: document.getElementById("industry").value.trim(),
+    goal: document.getElementById("goal").value.trim(),
+    tone: document.getElementById("tone").value,
+    messageType: document.getElementById("messageType").value,
+    extraContext: document.getElementById("extraContext").value.trim()
+  };
 
   const loader = document.getElementById("loader");
   const output = document.getElementById("outputSection");
@@ -15,42 +17,30 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
   output.classList.add("hidden");
   loader.classList.remove("hidden");
 
-  // SEND RAW FIELDS — NO "prompt:" WRAPPER
-  const body = {
-    businessName,
-    senderName,
-    recipientName,
-    industry,
-    goal,
-    tone,
-    messageType,
-    extraContext
-  };
-
   try {
     const res = await fetch("/api/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
     });
 
     const data = await res.json();
-
     loader.classList.add("hidden");
 
-    outputText.textContent = data.output || "No result";
+    outputText.textContent = data.output || JSON.stringify(data, null, 2);
     output.classList.remove("hidden");
 
   } catch (err) {
     loader.classList.add("hidden");
     outputText.textContent = "Error generating message.";
     output.classList.remove("hidden");
-    console.error("Frontend error:", err);
+    console.error(err);
   }
 });
 
 document.getElementById("copyBtn").addEventListener("click", () => {
-  const text = document.getElementById("outputText").textContent;
-  navigator.clipboard.writeText(text);
+  navigator.clipboard.writeText(document.getElementById("outputText").textContent);
   alert("Copied!");
 });
