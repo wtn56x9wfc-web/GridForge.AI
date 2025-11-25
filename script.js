@@ -1,102 +1,53 @@
-body {
-  font-family: system-ui, sans-serif;
-  margin: 0;
-  background: #f4f4f7;
-  color: #1a1a1a;
-}
+document.getElementById("generateBtn").addEventListener("click", async () => {
+  const businessName = document.getElementById("businessName").value.trim();
+  const senderName = document.getElementById("senderName").value.trim();
+  const recipientName = document.getElementById("recipientName").value.trim();
+  const industry = document.getElementById("industry").value.trim();
+  const goal = document.getElementById("goal").value.trim();
+  const tone = document.getElementById("tone").value;
+  const messageType = document.getElementById("messageType").value;
+  const extraContext = document.getElementById("extraContext").value.trim();
 
-header {
-  background: linear-gradient(135deg, #4e8df5, #6b5bff);
-  color: white;
-  padding: 40px 20px;
-  text-align: center;
-}
+  const loader = document.getElementById("loader");
+  const output = document.getElementById("outputSection");
+  const outputText = document.getElementById("outputText");
 
-header h1 {
-  margin: 0;
-  font-size: 42px;
-  font-weight: 800;
-}
+  output.classList.add("hidden");
+  loader.classList.remove("hidden");
 
-main {
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
-}
+  const body = {
+    businessName,
+    senderName,
+    recipientName,
+    industry,
+    goal,
+    tone,
+    messageType,
+    extraContext
+  };
 
-.card {
-  background: white;
-  padding: 30px;
-  width: 100%;
-  max-width: 600px;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
+  try {
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
-.card h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 28px;
-  font-weight: 700;
-}
+    const data = await res.json();
 
-.form-group {
-  margin-bottom: 18px;
-}
+    loader.classList.add("hidden");
 
-label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-}
+    outputText.textContent = data.output || "No result";
+    output.classList.remove("hidden");
 
-input, textarea, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-}
+  } catch (err) {
+    loader.textContent = "Error generating message.";
+    console.error(err);
+  }
+});
 
-textarea {
-  height: 90px;
-}
-
-button {
-  padding: 14px 24px;
-  background: #4e8df5;
-  border: none;
-  color: white;
-  font-size: 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-top: 10px;
-  width: 100%;
-  transition: 0.2s;
-}
-
-button:hover {
-  background: #3e7ce0;
-}
-
-#loader {
-  margin-top: 18px;
-  font-size: 16px;
-  color: #555;
-}
-
-.hidden {
-  display: none;
-}
-
-#outputSection {
-  margin-top: 30px;
-  padding: 20px;
-  background: #f0f2ff;
-  border-radius: 12px;
-}
-
-pre {
-  white-space: pre-wrap;
-  font-size: 15px;
-}
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const text = document.getElementById("outputText").textContent;
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
+});
