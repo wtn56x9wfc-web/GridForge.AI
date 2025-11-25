@@ -1,17 +1,59 @@
+import OpenAI from "openai";
+
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
-  const { prompt } = req.body;
-  const businessMatch = /Business: (.*)/.exec(prompt);
-  const goalMatch = /Goal: (.*)/.exec(prompt);
-  const business = businessMatch ? businessMatch[1].trim() : '';
-  const goal = goalMatch ? goalMatch[1].trim() : '';
-  const text = `Email 1: Hello! I hope you're doing well. I'm reaching out from ${business} because we specialize in helping people ${goal}. We'd love to connect and see how we can support you.
-Email 2: Hi there! I noticed your interest in ${goal}. At ${business}, we've guided many clients to success. Let me know if you'd like a quick chat.
-Generic social media DM: Hi! Saw you're interested in ${goal}. ${business} can help you make it happen—would you like to hear more?
-Facebook DM: Hello! I'm with ${business}. We assist people like you to ${goal}. Are you open to a brief conversation?
-SMS: Hi! This is ${business}. We help people ${goal}. Interested? Reply and we can talk!
-Video Script: Hi, I'm from ${business}. We help people ${goal}. If you're looking for friendly, professional support, let's connect.`;
-  return res.status(200).json({ text });
+
+  const {
+    businessName,
+    senderName,
+    recipientName,
+    industry,
+    goal,
+    tone,
+    messageType,
+    extraContext
+  } = req.body;
+
+  const prompt = `
+You are an elite outreach copywriter. Create a message that is:
+- extremely friendly
+- professional
+- concise
+- not salesy
+- tailored to the user's business and goal
+- written clearly in ${tone} tone
+- optimized for ${industry}
+- personalized for ${recipientName || "the recipient"}
+
+Business: ${businessName}
+Sender Name: ${senderName}
+Recipient Name: ${recipientName || "Not Provided"}
+Industry: ${industry}
+Goal: ${goal}
+Message Type: ${messageType}
+Extra Context: ${extraContext || "None"}
+
+Return ONLY clean JSON in this format:
+{
+  "output": "final outreach message here"
+}
+  `;
+
+  try {
+    const completion = await client.responses.create({
+      model: "gpt-4.1-mini",
+      input: prompt,
+      response_format: { type: "json_object" }
+    });
+
+    const final = completion.output[0].content[0].text;
+    return res.status(200).json(JSON.parse(final));
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Generation failed" });
+  }
 }
