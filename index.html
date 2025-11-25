@@ -2,24 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Sales Outreach Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeadForge.ai</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<h1>Sales Outreach Generator</h1>
+  <header>
+    <h1>LeadForge.ai</h1>
+    <p>High-quality outreach crafted instantly.</p>
+  </header>
 
-<label>What business are you in?</label>
-<input id="business" placeholder="Real estate, SaaS, fitness, whatever..." />
+  <main>
 
-<label>What do you want to accomplish?</label>
-<textarea id="goal" rows="3" placeholder="Book more calls, get leads, etc."></textarea>
+    <div class="card">
+      <h2>Outreach Generator</h2>
 
-<button onclick="generate()">Generate Outreach</button>
+      <div class="form-group">
+        <label>Business Name</label>
+        <input id="businessName" type="text" placeholder="Your company name" />
+      </div>
 
-<h2>Results</h2>
-<pre id="output">Your outreach will appear here...</pre>
+      <div class="form-group">
+        <label>Your Name</label>
+        <input id="senderName" type="text" placeholder="Your full name" />
+      </div>
 
-<script src="script.js"></script>
+      <div class="form-group">
+        <label>Recipient Name (optional)</label>
+        <input id="recipientName" type="text" placeholder="John, Sarah, etc." />
+      </div>
+
+      <div class="form-group">
+        <label>Industry</label>
+        <input id="industry" type="text" placeholder="Real estate, fitness, SaaS, etc." />
+      </div>
+
+      <div class="form-group">
+        <label>Goal</label>
+        <textarea id="goal" placeholder="What outcome are you trying to achieve?"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Tone</label>
+        <select id="tone">
+          <option value="friendly">Friendly</option>
+          <option value="professional">Professional</option>
+          <option value="assertive">Assertive</option>
+          <option value="casual">Casual</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Message Type</label>
+        <select id="messageType">
+          <option value="email">Email</option>
+          <option value="social">Social DM</option>
+          <option value="sms">SMS</option>
+          <option value="all">All</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Extra Context (optional)</label>
+        <textarea id="extraContext" placeholder="Any details the AI should know..."></textarea>
+      </div>
+
+      <button id="generateBtn">Generate Message</button>
+
+      <div id="loader" class="hidden">Generating…</div>
+
+      <div id="outputSection" class="hidden">
+        <h3>Your Outreach Message</h3>
+        <pre id="outputText"></pre>
+        <button id="copyBtn">Copy</button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
