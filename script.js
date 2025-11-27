@@ -1,8 +1,11 @@
+const isPaid = window.location.search.includes("paid=true");
+
 const generateBtn = document.getElementById("generateBtn");
 const loader = document.getElementById("loader");
 const outputSection = document.getElementById("outputSection");
 const outputText = document.getElementById("outputText");
 const copyBtn = document.getElementById("copyBtn");
+const sendEmailBtn = document.getElementById("sendEmailBtn");
 
 function show(el) {
   el.classList.remove("hidden");
@@ -16,6 +19,14 @@ function hide(el) {
 }
 
 generateBtn.addEventListener("click", async () => {
+
+  if (!isPaid) {
+    const res = await fetch("/api/create-checkout", { method: "POST" });
+    const data = await res.json();
+    window.location = data.url;
+    return;
+  }
+
   const body = {
     businessName: document.getElementById("businessName").value.trim(),
     senderName: document.getElementById("senderName").value.trim(),
@@ -33,7 +44,7 @@ generateBtn.addEventListener("click", async () => {
   try {
     const res = await fetch("/api/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(body)
     });
 
@@ -42,6 +53,7 @@ generateBtn.addEventListener("click", async () => {
     hide(loader);
     outputText.textContent = data.output || "No response.";
     show(outputSection);
+
   } catch (err) {
     hide(loader);
     outputText.textContent = "Error generating message.";
@@ -51,12 +63,25 @@ generateBtn.addEventListener("click", async () => {
 
 copyBtn.addEventListener("click", () => {
   navigator.clipboard.writeText(outputText.textContent);
-
   copyBtn.textContent = "Copied ✓";
-  copyBtn.style.background = "#3d815f";
+  setTimeout(() => (copyBtn.textContent = "Copy to Clipboard"), 1200);
+});
 
-  setTimeout(() => {
-    copyBtn.textContent = "Copy to Clipboard";
-    copyBtn.style.background = "#2d3352";
-  }, 1200);
+sendEmailBtn.addEventListener("click", async () => {
+  const email = prompt("Send message to which email?");
+  if (!email) return;
+
+  const res = await fetch("/api/send-email", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ to: email, message: outputText.textContent })
+  });
+
+  const data = await res.json();
+  if (data.id) {
+    sendEmailBtn.textContent = "Sent ✓";
+    setTimeout(() => (sendEmailBtn.textContent = "Send Email"), 1500);
+  } else {
+    alert("Email failed.");
+  }
 });
