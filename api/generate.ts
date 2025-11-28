@@ -1,36 +1,31 @@
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
-
-export default async function (req, res) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { businessName, senderName, recipientName, industry, goals, extra, messageType } = req.body;
+  try {
+    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  const prompt = `
-Create a ${messageType} outreach message.
+    const { businessName, senderName, recipientName, industry, goals } = req.body;
+
+    const prompt = `
+Generate a short outreach message for:
+
 Business: ${businessName}
 Sender: ${senderName}
 Recipient: ${recipientName}
 Industry: ${industry}
 Goals: ${goals}
-Additional Info: ${extra || "None"}
-`;
+    `;
 
-  try {
-    const completion = await client.responses.create({
+    const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
-      input: prompt
+      messages: [{ role: "user", content: prompt }]
     });
 
-    res.status(200).json({
-      message: completion.output_text
-    });
-
+    res.status(200).json({ message: completion.choices[0].message.content });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
