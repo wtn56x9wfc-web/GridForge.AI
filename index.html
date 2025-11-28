@@ -22,18 +22,6 @@
     <div id="output"></div>
   </div>
 
-  <script>
-    // Handle ?paid=true or ?paid=false if Stripe ever gets re-added
-    window.addEventListener("DOMContentLoaded", () => {
-      const url = new URL(window.location.href);
-      const paid = url.searchParams.get("paid");
-
-      if (paid === "true") {
-        document.body.classList.add("paid");
-      }
-    });
-  </script>
-
   <script src="/script.js"></script>
 </body>
 </html>
