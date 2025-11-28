@@ -1,46 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LeadForge.ai</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
   <header>
-    <h1>LeadForge.<span style="color:#4BA3FF;">ai</span></h1>
-    <p>Outreach built for closers.</p>
+    <div class="logo">LeadForge.<span>ai</span></div>
+    <div class="tagline">Outreach built for closers.</div>
   </header>
 
-  <div class="card">
-    <h2>Generate Outreach</h2>
+  <main>
+    <div class="card">
 
-    <label>Business Name</label>
-    <input id="businessName" placeholder="Acme Roofing" />
+      <h2>Generate Outreach</h2>
 
-    <label>Your Name</label>
-    <input id="senderName" placeholder="John Smith" />
+      <label>Business Name</label>
+      <input id="businessName" placeholder="Acme Roofing">
 
-    <label>Recipient Name</label>
-    <input id="recipientName" placeholder="Sara Patel" />
+      <label>Your Name</label>
+      <input id="senderName" placeholder="John Smith">
 
-    <label>Industry</label>
-    <input id="industry" placeholder="Roofing / Home Services" />
+      <label>Recipient Name</label>
+      <input id="recipientName" placeholder="Sara Patel">
 
-    <label>Message Type</label>
-    <select id="messageType">
-      <option value="Cold Email">Cold Email</option>
-      <option value="Follow-Up Email">Follow-Up Email</option>
-      <option value="Cold DM">Cold DM</option>
-      <option value="Upsell Message">Upsell Message</option>
-      <option value="Professional Email">Professional Email</option>
-    </select>
+      <label>Industry</label>
+      <input id="industry" placeholder="Roofing / Home Services">
 
-    <label>Business Goals</label>
-    <textarea id="goals" placeholder="Book inspections, upsell plans, generate leads..."></textarea>
+      <label>Message Type</label>
+      <select id="messageType">
+        <option value="Cold Email">Cold Email</option>
+        <option value="Warm Follow-up">Warm Follow-up</option>
+        <option value="Professional DM">Professional DM</option>
+        <option value="Sales Outreach">Sales Outreach</option>
+      </select>
 
-    <label>Additional Info</label>
-    <textarea id="extra" placeholder="Anything that helps the AI craft a more accurate message"></textarea>
+      <label>Business Goals</label>
+      <textarea id="goals" placeholder="Book inspections, upsell plans, generate leads..."></textarea>
 
-    <button id="generateBtn"
+      <label>Additional Info</label>
+      <textarea id="extra" placeholder="Anything extra..."></textarea>
+
+      <button id="generateBtn">Generate Outreach</button>
+
+      <div id="output" class="hidden"></div>
+
+    </div>
+  </main>
+
+  <footer>
+    © 2024 LeadForge.ai — All Rights Reserved
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
