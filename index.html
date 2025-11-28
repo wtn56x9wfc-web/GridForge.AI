@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LeadForge.ai</title>
   <link rel="stylesheet" href="/style.css" />
 </head>
 
 <body>
-  <div id="app"></div>
+  <div class="container">
+    <h1>LeadForge.ai</h1>
+
+    <input id="businessName" placeholder="Business Name" />
+    <input id="senderName" placeholder="Your Name" />
+    <input id="recipientName" placeholder="Recipient Name" />
+    <input id="industry" placeholder="Industry" />
+    <textarea id="goals" placeholder="Business Goals"></textarea>
+
+    <button id="generateBtn">Generate Outreach Message</button>
+
+    <div id="output"></div>
+  </div>
 
   <script>
-    // This script forces Vercel to always render index.html,
-    // even with query params like ?paid=true or ?paid=false
-    // BEFORE your actual app loads.
+    // Handle ?paid=true or ?paid=false if Stripe ever gets re-added
     window.addEventListener("DOMContentLoaded", () => {
       const url = new URL(window.location.href);
       const paid = url.searchParams.get("paid");
