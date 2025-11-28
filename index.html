@@ -8,38 +8,51 @@
 </head>
 
 <body>
-  <div class="wrapper">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">LeadForge<span>.ai</span></div>
+  </header>
+
+  <main class="wrapper">
     <div class="card">
-      <h1>LeadForge<span>.ai</span></h1>
+
+      <h2 class="section-title">Generate Outreach</h2>
 
       <label class="label" for="businessName">Business Name</label>
-      <input id="businessName" placeholder="Acme Roofing" />
+      <input id="businessName" />
 
       <label class="label" for="senderName">Your Name</label>
-      <input id="senderName" placeholder="John Smith" />
+      <input id="senderName" />
 
       <label class="label" for="recipientName">Recipient Name</label>
-      <input id="recipientName" placeholder="Sara Patel" />
+      <input id="recipientName" />
 
       <label class="label" for="industry">Industry</label>
-      <input id="industry" placeholder="Roofing / Home Services" />
+      <input id="industry" />
 
       <label class="label" for="messageType">Message Type</label>
       <select id="messageType">
-        <option value="Cold Email" selected>Cold Email</option>
-        <option value="Follow-Up">Follow-Up</option>
-        <option value="LinkedIn DM">LinkedIn DM</option>
-        <option value="SMS">SMS</option>
+        <option value="Cold Email">Cold Email</option>
+        <option value="Follow-Up Email">Follow-Up Email</option>
+        <option value="LinkedIn Outreach">LinkedIn Outreach</option>
+        <option value="SMS Outreach">SMS Outreach</option>
       </select>
 
       <label class="label" for="goals">Business Goals</label>
-      <textarea id="goals" placeholder="Book roof inspections, upsell maintenance plans, target neighborhoods hit by recent storms."></textarea>
+      <textarea id="goals"></textarea>
 
       <button id="generateBtn">Generate Outreach</button>
 
-      <div id="output"></div>
+      <div id="output" class="hidden"></div>
+
     </div>
-  </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2024 LeadForge.ai — All Rights Reserved</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
