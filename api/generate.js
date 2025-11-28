@@ -5,22 +5,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-  });
+  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  const { businessName, senderName, recipientName, industry, goals, extra } = req.body;
+  const { businessName, senderName, recipientName, industry, goals, extra, messageType } = req.body || {};
 
   const prompt = `
-Generate a short outreach message for:
+Generate a concise ${messageType || "cold email"} outreach.
 
-Business: ${businessName}
-Sender: ${senderName}
-Recipient: ${recipientName}
-Industry: ${industry}
-Goals: ${goals}
-Extra Info: ${extra}
-  `;
+Business: ${businessName || "-"}
+Sender: ${senderName || "-"}
+Recipient: ${recipientName || "-"}
+Industry: ${industry || "-"}
+Goals: ${goals || "-"}
+Extra: ${extra || "-"}
+  `.trim();
 
   try {
     const completion = await client.chat.completions.create({
@@ -28,11 +26,8 @@ Extra Info: ${extra}
       messages: [{ role: "user", content: prompt }]
     });
 
-    res.status(200).json({
-      message: completion.choices[0].message.content
-    });
-
+    res.status(200).json({ message: completion.choices?.[0]?.message?.content ?? "No response" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: String(err?.message || err) });
   }
 }
