@@ -1,13 +1,4 @@
 {
-  "name": "leadforge-ai",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "start": "vercel dev"
-  },
-  "dependencies": {
-    "openai": "^4.0.0",
-    "node-fetch": "^2.6.7",
-    "stripe": "^12.0.0"
-  }
+  "name": "leadforge",
+  "version": "1.0.0"
 }
