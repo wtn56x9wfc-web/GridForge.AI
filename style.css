@@ -1,11 +1,22 @@
-body {
+/* GLOBAL RESET + UNIFORM FONT */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-weight: 400 !important;
+  color: inherit;
+}
+
+/* PAGE BACKGROUND */
+body {
   background: #0d0d0d;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #fff;
 }
 
+/* HEADER */
 header {
   text-align: center;
   padding: 40px 0 10px 0;
@@ -13,7 +24,7 @@ header {
 
 .logo {
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 700 !important;
 }
 
 .logo span {
@@ -26,12 +37,14 @@ header {
   font-size: 15px;
 }
 
+/* MAIN LAYOUT */
 main {
   display: flex;
   justify-content: center;
   padding: 40px 20px;
 }
 
+/* CARD */
 .card {
   background: #111;
   width: 480px;
@@ -40,12 +53,15 @@ main {
   box-shadow: 0 0 40px rgba(0,0,0,0.4);
 }
 
+/* TITLE */
 h2 {
   text-align: center;
   margin-bottom: 24px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 600 !important;
 }
 
+/* FORM LABELS */
 label {
   display: block;
   margin-top: 12px;
@@ -53,30 +69,51 @@ label {
   font-size: 14px;
 }
 
-input, select, textarea {
+/* INPUTS / SELECTS / TEXTAREA */
+input,
+select,
+textarea {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
   border: 1px solid #333;
   background: #1a1a1a;
   color: white;
-  font-size: 15px;
+  font-size: 15px !important;
 }
 
+/* FIX SELECT FONT + OPTIONS */
+select,
+select option {
+  font-size: 15px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  color: #ddd !important;
+}
+
+/* FIX PLACEHOLDER FONT */
+input::placeholder,
+textarea::placeholder {
+  color: #777 !important;
+  font-size: 15px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* TEXTAREA */
 textarea {
   height: 90px;
   resize: none;
 }
 
+/* BUTTON */
 button {
   margin-top: 20px;
   width: 100%;
   padding: 14px;
   border: none;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 16px !important;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 600 !important;
   background: #0066ff;
   color: #fff;
   transition: 0.2s;
@@ -86,6 +123,7 @@ button:hover {
   background: #0053d6;
 }
 
+/* OUTPUT BOX */
 #output {
   margin-top: 24px;
   padding: 20px;
@@ -93,13 +131,15 @@ button:hover {
   border-radius: 12px;
   white-space: pre-wrap;
   border: 1px solid #333;
-  font-size: 15px;
+  font-size: 15px !important;
 }
 
+/* HIDDEN */
 .hidden {
   display: none;
 }
 
+/* FOOTER */
 footer {
   text-align: center;
   margin-top: 50px;
@@ -107,4 +147,3 @@ footer {
   color: #666;
   font-size: 14px;
 }
-
