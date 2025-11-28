@@ -10,6 +10,7 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
     recipientName: recipientName.value.trim(),
     industry: industry.value.trim(),
     goals: goals.value.trim(),
+    extra: extra.value.trim(),      // NEW FIELD HERE
     messageType: messageType.value
   };
 
@@ -17,7 +18,7 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
 
     const data = await res.json();
