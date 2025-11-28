@@ -9,30 +9,38 @@
 
 <body>
   <header>
-    <div class="logo">LeadForge<span>.ai</span></div>
-    <div class="tagline">Outreach built for closers.</div>
+    <h1>LeadForge.<span style="color:#4BA3FF;">ai</span></h1>
+    <p>Outreach built for closers.</p>
   </header>
 
-  <main>
-    <div class="card">
+  <div class="card">
+    <h2>Generate Outreach</h2>
 
-      <h2>Generate Outreach</h2>
+    <label>Business Name</label>
+    <input id="businessName" placeholder="Acme Roofing" />
 
-      <label>Business Name</label>
-      <input type="text" id="businessName" placeholder="Acme Roofing" />
+    <label>Your Name</label>
+    <input id="senderName" placeholder="John Smith" />
 
-      <label>Your Name</label>
-      <input type="text" id="senderName" placeholder="John Smith" />
+    <label>Recipient Name</label>
+    <input id="recipientName" placeholder="Sara Patel" />
 
-      <label>Recipient Name</label>
-      <input type="text" id="recipientName" placeholder="Sara Patel" />
+    <label>Industry</label>
+    <input id="industry" placeholder="Roofing / Home Services" />
 
-      <label>Industry</label>
-      <input type="text" id="industry" placeholder="Roofing / Home Services" />
+    <label>Message Type</label>
+    <select id="messageType">
+      <option value="Cold Email">Cold Email</option>
+      <option value="Follow-Up Email">Follow-Up Email</option>
+      <option value="Cold DM">Cold DM</option>
+      <option value="Upsell Message">Upsell Message</option>
+      <option value="Professional Email">Professional Email</option>
+    </select>
 
-      <label>Message Type</label>
-      <select id="messageType">
-        <option value="cold email">Cold Email</option>
-        <option value="warm email">Warm Email</option>
-        <option value="follow-up">Follow-Up</option>
-        <option value="sms">SMS</
+    <label>Business Goals</label>
+    <textarea id="goals" placeholder="Book inspections, upsell plans, generate leads..."></textarea>
+
+    <label>Additional Info</label>
+    <textarea id="extra" placeholder="Anything that helps the AI craft a more accurate message"></textarea>
+
+    <button id="generateBtn"
