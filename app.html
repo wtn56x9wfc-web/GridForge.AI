@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GridForge App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="nav-logo">GridForge<span>.ai</span></div>
+    <div class="nav-links">
+      <a class="nav-cta" href="index.html">Back Home</a>
+    </div>
+  </nav>
+
+  <section class="value" style="padding-top: 40px;">
+    <h2>Generate Outreach</h2>
+
+    <div class="card" style="max-width: 600px; margin: 40px auto; background:#111; padding:30px; border-radius:10px; border:1px solid #1f1f1f;">
+
+      <label>Business Name</label>
+      <input type="text" id="businessName" placeholder="Acme Roofing" />
+
+      <label>Your Name</label>
+      <input type="text" id="senderName" placeholder="John Smith" />
+
+      <label>Recipient Name</label>
+      <input type="text" id="recipientName" placeholder="Sara Patel" />
+
+      <label>Industry</label>
+      <input type="text" id="industry" placeholder="Roofing / Home Services" />
+
+      <label>Message Type</label>
+      <select id="messageType">
+        <option value="cold-email">Cold Email</option>
+        <option value="warm-intro">Warm Introduction</option>
+        <option value="follow-up">Follow-Up Email</option>
+        <option value="re-engage">Re-Engagement Email</option>
+        <option value="sales-pitch">Sales Pitch</option>
+        <option value="discovery-call">Discovery Call Request</option>
+        <option value="proposal">Proposal Delivery</option>
+        <option value="contract-followup">Contract Follow-Up</option>
+        <option value="sms">SMS Outreach</option>
+        <option value="linkedin-connect">LinkedIn Connection Request</option>
+        <option value="linkedin-pitch">LinkedIn Pitch</option>
+        <option value="thank-you">Thank-You Message</option>
+      </select>
+
+      <label>Business Goals</label>
+      <textarea id="goals" placeholder="Book inspections, upsell plans, generate leads..."></textarea>
+
+      <label>Additional Info</label>
+      <textarea id="extra" placeholder="Anything extra..."></textarea>
+
+      <button id="generateBtn" class="btn-primary" style="width:100%; margin-top:20px;">Generate Outreach</button>
+
+      <textarea id="output" class="hidden" style="margin-top:30px;"></textarea>
+
+    </div>
+  </section>
+
+  <footer>
+    © 2025 GridForge.ai — All Rights Reserved
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
