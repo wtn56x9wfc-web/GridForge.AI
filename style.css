@@ -1,149 +1,155 @@
-/* GLOBAL RESET + UNIFORM FONT */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/* RESET */
+* {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-  font-weight: 400 !important;
-  color: inherit;
+  box-sizing: border-box;
 }
 
-/* PAGE BACKGROUND */
 body {
   background: #0d0d0d;
-  color: #fff;
+  color: #e5e5e5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
 }
 
-/* HEADER */
-header {
+:root {
+  --accent: #14b8a6;
+}
+
+/* NAVBAR */
+.navbar {
+  width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0d0d0d;
+  border-bottom: 1px solid #1a1a1a;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.nav-logo {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.nav-logo span {
+  color: var(--accent);
+}
+
+.nav-links a {
+  margin-left: 28px;
+  color: #e5e5e5;
+  text-decoration: none;
+  transition: 0.25s;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+}
+
+.nav-cta {
+  padding: 8px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+}
+
+/* HERO */
+.hero {
   text-align: center;
-  padding: 40px 0 10px 0;
+  padding: 140px 20px 90px;
+  max-width: 800px;
+  margin: auto;
 }
 
-.logo {
-  font-size: 32px;
-  font-weight: 700 !important;
+.hero h1 {
+  font-size: 3.2rem;
+  font-weight: 800;
+  margin-bottom: 20px;
 }
 
-.logo span {
-  color: #4ea6ff;
-}
-
-.tagline {
-  margin-top: 6px;
+.hero p {
+  font-size: 1.25rem;
   color: #b3b3b3;
-  font-size: 15px;
 }
 
-/* MAIN LAYOUT */
-main {
+.hero-buttons {
+  margin-top: 30px;
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
+  gap: 20px;
 }
 
-/* CARD */
-.card {
-  background: #111;
-  width: 480px;
-  padding: 32px;
-  border-radius: 16px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.4);
+.btn-primary {
+  background: var(--accent);
+  padding: 14px 28px;
+  color: #0d0d0d;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
 }
 
-/* TITLE */
-h2 {
+.btn-secondary {
+  border: 1px solid var(--accent);
+  padding: 14px 28px;
+  color: var(--accent);
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+/* VALUE */
+.value {
   text-align: center;
-  margin-bottom: 24px;
-  font-size: 22px;
-  font-weight: 600 !important;
+  padding: 80px 20px;
 }
 
-/* FORM LABELS */
-label {
-  display: block;
-  margin-top: 12px;
-  margin-bottom: 6px;
-  font-size: 14px;
+.value h2 {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
 }
 
-/* INPUTS / SELECTS / TEXTAREA */
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 12px;
+/* FEATURES */
+.features {
+  max-width: 1000px;
+  margin: 60px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.feature-box {
+  background: #111;
+  padding: 30px;
+  width: 280px;
   border-radius: 10px;
-  border: 1px solid #333;
-  background: #1a1a1a;
-  color: white;
-  font-size: 15px !important;
+  border: 1px solid #1f1f1f;
+  transition: 0.25s ease;
 }
 
-/* FIX SELECT FONT + OPTIONS */
-select,
-select option {
-  font-size: 15px !important;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-  color: #ddd !important;
+.feature-box:hover {
+  border-color: var(--accent);
+  transform: translateY(-5px);
 }
 
-/* FIX PLACEHOLDER FONT */
-input::placeholder,
-textarea::placeholder {
-  color: #777 !important;
-  font-size: 15px !important;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+/* CTA */
+.cta {
+  text-align: center;
+  padding: 80px 20px;
+  margin-top: 100px;
 }
 
-/* TEXTAREA */
-textarea {
-  height: 90px;
-  resize: none;
-}
-
-/* BUTTON */
-button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px !important;
-  cursor: pointer;
-  font-weight: 600 !important;
-  background: #0066ff;
-  color: #fff;
-  transition: 0.2s;
-}
-
-button:hover {
-  background: #0053d6;
-}
-
-/* OUTPUT BOX */
-#output {
-  margin-top: 24px;
-  padding: 20px;
-  background: #1a1a1a;
-  border-radius: 12px;
-  white-space: pre-wrap;
-  border: 1px solid #333;
-  font-size: 15px !important;
-}
-
-/* HIDDEN */
-.hidden {
-  display: none;
+.cta h2 {
+  font-size: 2.4rem;
+  margin-bottom: 20px;
 }
 
 /* FOOTER */
 footer {
   text-align: center;
-  margin-top: 50px;
   padding: 40px;
-  color: #666;
-  font-size: 14px;
+  color: #777;
+  font-size: 0.9rem;
 }
