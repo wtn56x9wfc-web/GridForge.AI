@@ -1,94 +1,76 @@
+<!-- faq.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GridForge.ai — FAQ</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GridForge FAQ</title>
+  <meta name="description" content="Frequently asked questions about GridForge." />
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-  <!-- NAVBAR -->
   <nav class="navbar">
-    <div class="nav-logo">GridForge<span>.ai</span></div>
-    <div class="nav-links">
-      <a href="process.html">Process</a>
-      <a href="faq.html">FAQ</a>
-      <a href="app.html" class="nav-cta">Open GridForge</a>
+    <div class="container inner">
+      <div class="nav-logo">Grid<strong><span>Forge</span></strong></div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="process.html">How it Works</a>
+        <a href="app.html" class="nav-cta">Open GridForge</a>
+      </div>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero" style="padding: 120px 20px 60px;">
-    <h1>Frequently Asked Questions</h1>
-    <p style="max-width: 700px; margin:auto; color:#b3b3b3;">
-      Simple, direct answers — no jargon, no fluff.
-    </p>
-  </section>
+  <header class="hero" style="padding:80px 20px 20px;">
+    <h1>FAQ</h1>
+    <p>Direct answers to common questions—no filler.</p>
+  </header>
 
-  <!-- FAQ CONTENT -->
-  <section class="value" style="max-width: 900px; margin:auto; text-align:left;">
+  <main class="container" style="margin:30px auto 100px;">
+    <div class="grid grid-2">
+      <div class="card">
+        <h3 style="margin-bottom:8px;">What makes GridForge different?</h3>
+        <p style="color:var(--text-muted);">
+          Focused UX, strong defaults, and succinct writing standards. We use proven patterns from top AI orgs:
+          short paragraphs, clear structure, and outcome-driven prompts.
+        </p>
+      </div>
 
-    <div class="faq-item" style="margin-bottom:45px;">
-      <h3 style="color: var(--accent); margin-bottom:12px;">What is GridForge?</h3>
-      <p>
-        GridForge generates high-performing outreach across email, LinkedIn, and SMS. 
-        It writes like a human and helps you book more meetings with less effort.
-      </p>
+      <div class="card">
+        <h3 style="margin-bottom:8px;">Do you store my data?</h3>
+        <p style="color:var(--text-muted);">
+          Inputs are used to generate drafts and improve the experience. Sensitive data handling follows common enterprise guidelines.
+          Configure internal policies as needed.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:8px;">Can I customize tone and templates?</h3>
+        <p style="color:var(--text-muted);">
+          Yes. Define tone, message type, and goals. GridForge aligns to your voice while keeping messages professional and concise.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:8px;">Is this only for email?</h3>
+        <p style="color:var(--text-muted);">
+          No. It supports emails, LinkedIn DMs, follow-ups, and inbound replies—always emphasizing clarity and strong calls-to-action.
+        </p>
+      </div>
     </div>
 
-    <div class="faq-item" style="margin-bottom:45px;">
-      <h3 style="color: var(--accent); margin-bottom:12px;">How personalized is the messaging?</h3>
-      <p>
-        Extremely. You enter the business, goals, recipient, and context — GridForge 
-        builds tailored, non-generic messaging that feels natural and specific.
-      </p>
-    </div>
+    <section class="cta">
+      <div class="container">
+        <p style="max-width:760px;margin:0 auto 22px;color:var(--text-muted);">
+          If you know what good looks like—concise memos, clear asks, measurable outcomes—you’ll feel at home here.
+        </p>
+        <a class="btn-secondary" href="app.html">Open GridForge</a>
+      </div>
+    </section>
+  </main>
 
-    <div class="faq-item" style="margin-bottom:45px;">
-      <h3 style="color: var(--accent); margin-bottom:12px;">What types of messages can GridForge generate?</h3>
-      <p>
-        Cold emails, warm intros, follow-ups, re-engagement, LinkedIn scripts, SMS scripts, 
-        discovery call requests, proposals, and more. If it books meetings — it can generate it.
-      </p>
-    </div>
-
-    <div class="faq-item" style="margin-bottom:45px;">
-      <h3 style="color: var(--accent); margin-bottom:12px;">Does this replace a sales rep?</h3>
-      <p>
-        No. It replaces the <strong>time-consuming writing</strong>, not the rep. You still run the plays — 
-        GridForge just gives you messaging that actually works.
-      </p>
-    </div>
-
-    <div class="faq-item" style="margin-bottom:45px;">
-      <h3 style="color: var(--accent); margin-bottom:12px;">Can I use it for multiple clients?</h3>
-      <p>
-        Absolutely. Agencies, SDR teams, and consultants use GridForge to scale messaging 
-        across multiple clients without burning time writing manually.
-      </p>
-    </div>
-
-    <div class="faq-item" style="margin-bottom:45px;">
-      <h3 style="color: var(--accent); margin-bottom:12px;">Does GridForge store my data?</h3>
-      <p>
-        No sensitive data is stored. Your inputs are only used to produce the message, then cleared.
-      </p>
-    </div>
-
-  </section>
-
-  <!-- CTA -->
-  <section class="cta">
-    <h2>Ready to step up your outreach?</h2>
-    <a class="btn-primary" href="app.html">Open GridForge</a>
-  </section>
-
-  <!-- FOOTER -->
   <footer>
-    © 2025 GridForge.ai — All Rights Reserved
+    <div class="container">© <span id="year"></span> GridForge.</div>
   </footer>
-
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
