@@ -115,4 +115,113 @@
 </main>
 
 <script>
-  const csvFil
+  const csvFile = document.getElementById("csvFile");
+  const fromInput = document.getElementById("from");
+  const replyToInput = document.getElementById("replyTo");
+  const subjectTpl = document.getElementById("subjectTpl");
+  const bodyTpl = document.getElementById("bodyTpl");
+  const endpointInput = document.getElementById("endpoint");
+  const previewSec = document.getElementById("previewSec");
+  const previewTable = document.getElementById("previewTable");
+  const resultsSec = document.getElementById("resultsSec");
+  const resultsTable = document.getElementById("resultsTable");
+  const countPill = document.getElementById("count");
+  const summaryPill = document.getElementById("summary");
+
+  let parsedRows = [];
+  let preparedEmails = [];
+
+  function parseCSV(text) {
+    const lines = text.split(/\r?\n/).filter(l => l.trim() !== "");
+    const headers = lines[0].split(",");
+    return lines.slice(1).map(line => {
+      const cells = line.split(",");
+      const obj = {};
+      headers.forEach((h, i) => obj[h.trim()] = cells[i]?.trim() || "");
+      return obj;
+    });
+  }
+
+  function interpolate(tpl, row) {
+    return tpl.replace(/\{\{(\w+)\}\}/g, (_, key) => row[key] || "");
+  }
+
+  function stripHtml(html) {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || "";
+  }
+
+  document.getElementById("previewBtn").onclick = async () => {
+    const file = csvFile.files[0];
+    if (!file) return alert("Upload a CSV first.");
+
+    parsedRows = parseCSV(await file.text());
+    preparedEmails = parsedRows.map(r => {
+      const to = r.email || r.to;
+      const subject = r.subject || interpolate(subjectTpl.value, r);
+      const html = r.body || interpolate(bodyTpl.value, r);
+      return {
+        to,
+        subject,
+        html,
+        text: stripHtml(html)
+      };
+    });
+
+    previewSec.style.display = "block";
+    countPill.textContent = preparedEmails.length;
+
+    previewTable.innerHTML = `
+      <table>
+        <thead><tr><th>Email</th><th>Subject</th><th>Preview</th></tr></thead>
+        <tbody>
+        ${preparedEmails.map(e => `
+          <tr>
+            <td>${e.to}</td>
+            <td>${e.subject}</td>
+            <td>${e.text.slice(0, 80)}</td>
+          </tr>`).join("")}
+        </tbody>
+      </table>
+    `;
+  };
+
+  document.getElementById("sendBtn").onclick = async () => {
+    if (preparedEmails.length === 0) return alert("Preview first.");
+
+    const payload = {
+      from: fromInput.value.trim(),
+      replyTo: replyToInput.value.trim(),
+      emails: preparedEmails
+    };
+
+    const resp = await fetch(endpointInput.value.trim(), {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    const data = await resp.json();
+    resultsSec.style.display = "block";
+
+    summaryPill.textContent = `${data.summary.sent}/${data.summary.total} sent`;
+
+    resultsTable.innerHTML = `
+      <table>
+        <thead><tr><th>Email</th><th>Status</th><th>ID/Error</th></tr></thead>
+        <tbody>
+          ${data.results.map(r => `
+            <tr>
+              <td>${r.to}</td>
+              <td>${r.ok ? "OK" : "FAIL"}</td>
+              <td>${r.ok ? r.id : r.error}</td>
+            </tr>`).join("")}
+        </tbody>
+      </table>
+    `;
+  };
+</script>
+
+</body>
+</html>
