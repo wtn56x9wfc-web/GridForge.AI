@@ -7,8 +7,8 @@
 
 /* ========== TOKENS ========== */
 :root {
-  /* Accent: switch to #16a34a for a true green, or keep teal #14b8a6 */
-  --accent: #16a34a;
+  /* Accent: British Racing Green */
+  --accent: #004225;
 
   /* Light canvas */
   --bg: #f7f9fc;
@@ -86,16 +86,17 @@ body {
   position: relative;
   isolation: isolate;
 }
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:-10% -5% auto -5%;
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -10% -5% auto -5%;
   height: 55%;
   background:
     radial-gradient(60% 60% at 20% 20%, rgba(14,165,233,.10), transparent 60%),
     radial-gradient(40% 40% at 80% 10%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 60%);
-  z-index:-1;
-  pointer-events:none;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .hero h1 {
@@ -127,7 +128,10 @@ body {
   box-shadow: var(--shadow-md);
   transition: filter .15s ease;
 }
-.btn-primary:hover { filter: brightness(.95); }
+
+.btn-primary:hover {
+  filter: brightness(.95);
+}
 
 .btn-secondary {
   border: 1px solid var(--accent);
@@ -138,6 +142,7 @@ body {
   font-weight: 700;
   transition: background .15s ease;
 }
+
 .btn-secondary:hover {
   background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
@@ -172,6 +177,7 @@ body {
   transition: 0.25s ease;
   box-shadow: var(--shadow-sm);
 }
+
 .feature-box:hover {
   border-color: var(--accent);
   transform: translateY(-5px);
@@ -183,6 +189,7 @@ body {
   padding: 80px 20px;
   margin-top: 100px;
 }
+
 .cta h2 {
   font-size: 2.4rem;
   margin-bottom: 20px;
@@ -229,7 +236,7 @@ textarea {
 footer {
   text-align: center;
   padding: 40px;
-  color: #64748b; /* slate-500 */
+  color: #64748b;
   font-size: 0.9rem;
 }
 
@@ -246,8 +253,13 @@ body.theme-dark .navbar {
   backdrop-filter: none;
 }
 
-body.theme-dark .nav-links a { color: #e5e5e5; }
-body.theme-dark .nav-links a:hover { color: var(--accent); }
+body.theme-dark .nav-links a {
+  color: #e5e5e5;
+}
+
+body.theme-dark .nav-links a:hover {
+  color: var(--accent);
+}
 
 body.theme-dark .nav-cta {
   color: inherit;
@@ -255,7 +267,7 @@ body.theme-dark .nav-cta {
   background: transparent;
 }
 
-body.theme-dark .hero::before{
+body.theme-dark .hero::before {
   background:
     radial-gradient(60% 60% at 20% 20%, rgba(14,165,233,.08), transparent 60%),
     radial-gradient(40% 40% at 80% 10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%);
