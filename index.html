@@ -6,66 +6,138 @@
   <title>GridForge — AI-Assisted Outreach</title>
   <meta name="description" content="Concise, professional outreach powered by a clean, enterprise-grade UX." />
   <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ACCESS GATE (doesn't affect your styling anywhere else) */
+    #access-gate {
+      position: fixed;
+      inset: 0;
+      background: #0d0d0d;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      font-family: Arial, sans-serif;
+      z-index: 99999;
+    }
+    #access-gate input {
+      padding: 12px 16px;
+      border: none;
+      border-radius: 6px;
+      outline: none;
+      font-size: 18px;
+    }
+    #access-gate button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #4e8cff;
+      color: white;
+    }
+    #access-error {
+      color: red;
+      display: none;
+      font-size: 16px;
+    }
+  </style>
 </head>
+
 <body>
-  <!-- NAV -->
-  <nav class="navbar">
-    <div class="container inner">
-      <div class="nav-logo">Grid<strong><span>Forge</span></strong></div>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="process.html">How it Works</a>
-        <a href="faq.html">FAQ</a>
+
+  <!-- ACCESS GATE -->
+  <div id="access-gate">
+    <h2>Enter Access Code</h2>
+    <input id="access-input" type="password" placeholder="Access code..." />
+    <button onclick="checkAccess()">Enter</button>
+    <p id="access-error">Wrong code.</p>
+  </div>
+
+  <!-- REAL SITE CONTENT -->
+  <div id="app" style="display:none;">
+    <!-- NAV -->
+    <nav class="navbar">
+      <div class="container inner">
+        <div class="nav-logo">Grid<strong><span>Forge</span></strong></div>
+        <div class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="process.html">How it Works</a>
+          <a href="faq.html">FAQ</a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- HERO (only place with Open GridForge) -->
-  <header class="hero">
-    <h1>AI-assisted outreach that respects attention</h1>
-    <p>
-      Reach the right people with messages that read like a pro wrote them—confident, concise, and relevant.
-      The language and UX follow the same modern standards used by leading AI product teams: clear structure, strong defaults,
-      and measurable outcomes.
-    </p>
-    <div class="hero-buttons">
-      <a class="btn-primary" href="app.html">Open GridForge</a>
-      <a class="btn-secondary" href="process.html">See how it works</a>
-    </div>
-  </header>
-
-  <!-- VALUE -->
-  <section class="section">
-    <div class="container">
-      <h2>What you get</h2>
-      <p style="max-width:760px;margin-top:8px;color:var(--text-muted);">
-        Precision messaging and a streamlined workflow. Signal over noise, built for operators who care about outcomes.
+    <!-- HERO (only place with Open GridForge) -->
+    <header class="hero">
+      <h1>AI-assisted outreach that respects attention</h1>
+      <p>
+        Reach the right people with messages that read like a pro wrote them—confident, concise, and relevant.
+        The language and UX follow the same modern standards used by leading AI product teams: clear structure, strong defaults,
+        and measurable outcomes.
       </p>
-    </div>
-  </section>
+      <div class="hero-buttons">
+        <a class="btn-primary" href="app.html">Open GridForge</a>
+        <a class="btn-secondary" href="process.html">See how it works</a>
+      </div>
+    </header>
 
-  <!-- FEATURES -->
-  <section class="container">
-    <div class="features">
-      <div class="feature-box">
-        <h3>Concise, on-brand copy</h3>
-        <p>Professional tone without the fluff. Context-aware and ready to send.</p>
+    <!-- VALUE -->
+    <section class="section">
+      <div class="container">
+        <h2>What you get</h2>
+        <p style="max-width:760px;margin-top:8px;color:var(--text-muted);">
+          Precision messaging and a streamlined workflow. Signal over noise, built for operators who care about outcomes.
+        </p>
       </div>
-      <div class="feature-box">
-        <h3>Simple pipeline</h3>
-        <p>Provide inputs, generate a draft, review, ship. Clean surfaces and fast iteration.</p>
-      </div>
-      <div class="feature-box">
-        <h3>Built to scale</h3>
-        <p>Frontend clarity that pairs with modern data and GPU stacks when you need to grow.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">© <span id="year"></span> GridForge.</div>
-  </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    <!-- FEATURES -->
+    <section class="container">
+      <div class="features">
+        <div class="feature-box">
+          <h3>Concise, on-brand copy</h3>
+          <p>Professional tone without the fluff. Context-aware and ready to send.</p>
+        </div>
+        <div class="feature-box">
+          <h3>Simple pipeline</h3>
+          <p>Provide inputs, generate a draft, review, ship. Clean surfaces and fast iteration.</p>
+        </div>
+        <div class="feature-box">
+          <h3>Built to scale</h3>
+          <p>Frontend clarity that pairs with modern data and GPU stacks when you need to grow.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">© <span id="year"></span> GridForge.</div>
+    </footer>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </div>
+
+  <script>
+    function checkAccess() {
+      const input = document.getElementById("access-input").value.trim();
+      const error = document.getElementById("access-error");
+
+      if (input === "forgealpha") {
+        document.getElementById("access-gate").style.display = "none";
+        document.getElementById("app").style.display = "block";
+        localStorage.setItem("gridforge_access", "true");
+      } else {
+        error.style.display = "block";
+      }
+    }
+
+    // Auto-login if code was already entered
+    if (localStorage.getItem("gridforge_access") === "true") {
+      document.getElementById("access-gate").style.display = "none";
+      document.getElementById("app").style.display = "block";
+    }
+  </script>
 </body>
 </html>
