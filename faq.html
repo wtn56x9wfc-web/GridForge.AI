@@ -1,37 +1,18 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <style>html{display:none !important;}</style>
-
-  <script>
-    (function () {
-      const ACCESS_KEY = "forgealpha";
-      const FLAG = "gf_unlocked_v1";
-
-      if (localStorage.getItem(FLAG) === "1") {
-        document.documentElement.style.display = "";
-        return;
-      }
-
-      const entered = prompt("Access key required:");
-      if (!entered || entered.trim() !== ACCESS_KEY) {
-        location.replace("https://google.com");
-        return;
-      }
-
-      localStorage.setItem(FLAG, "1");
-      document.documentElement.style.display = "";
-    })();
-  </script>
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GridForge — FAQ</title>
-  <meta name="description" content="Clear answers to common questions." />
+  <meta name="description" content="Straight answers about GridForge. No fluff." />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+
+  <!-- NAV -->
+
   <nav class="navbar">
     <div class="container inner">
       <div class="nav-logo">Grid<strong><span>Forge</span></strong></div>
@@ -39,120 +20,160 @@
         <a href="index.html">Home</a>
         <a href="process.html">How it Works</a>
         <a href="faq.html">FAQ</a>
+        <a href="app.html" class="nav-cta">Open GridForge</a>
       </div>
     </div>
   </nav>
+
+  <!-- HERO -->
 
   <header class="hero" style="padding:90px 20px 36px;">
     <h1>FAQ</h1>
     <p>Straight answers. No filler. No coping.</p>
   </header>
 
+  <!-- CONTENT -->
+
   <main class="container section" style="padding-top:24px;">
     <div class="grid grid-2">
 
-      <div class="card">
-        <h3>What is GridForge?</h3>
-        <p style="color:var(--text-muted)">
-          GridForge is a workflow for generating professional outreach: you provide structured inputs,
-          it drafts clear messaging, and you review + send. It’s built for signal over noise.
-        </p>
-      </div>
+```
+  <div class="card">
+    <h3>What is GridForge?</h3>
+    <p style="color:var(--text-muted);">
+      GridForge is a structured workflow for writing outreach that doesn’t sound like AI slop.
+      You give it clear inputs — who, why, and what you want — and it generates concise,
+      professional drafts you can actually send.
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>What makes GridForge different?</h3>
-        <p style="color:var(--text-muted)">
-          Strong defaults, clean structure, and concise writing. It’s designed to produce messages
-          that feel human and get to the point.
-        </p>
-      </div>
+  <div class="card">
+    <h3>Who is GridForge for?</h3>
+    <p style="color:var(--text-muted);">
+      Operators, founders, sales, and growth teams who care about clarity, not volume.
+      If you want outreach that sounds intentional instead of desperate or generic,
+      this is built for you.
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>Is it only for email?</h3>
-        <p style="color:var(--text-muted)">
-          No. Email, LinkedIn DMs, follow-ups, and inbound replies are supported.
-          The structure adapts, but the rules stay the same: relevance + clarity + a clear ask.
-        </p>
-      </div>
+  <div class="card">
+    <h3>What makes GridForge different?</h3>
+    <p style="color:var(--text-muted);">
+      Strong defaults, tight structure, and constraints that actually help.
+      No “AI vibes.” No corporate word salad.
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>How do I get better outputs?</h3>
-        <p style="color:var(--text-muted)">
-          Better inputs. Add one specific relevance hook, keep constraints clear,
-          and don’t ask for five things at once.
-        </p>
-      </div>
+  <div class="card">
+    <h3>Is it only for email?</h3>
+    <p style="color:var(--text-muted);">
+      No. Email, LinkedIn DMs, follow-ups, and inbound replies are supported.
+      Each message type has different rules for length, tone, and pacing.
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>Do you store my data?</h3>
-        <p style="color:var(--text-muted)">
-          Treat GridForge like any outbound tool: don’t paste secrets or regulated data.
-          If you operate under strict compliance, keep inputs aligned with your internal policies.
-        </p>
-      </div>
+  <div class="card">
+    <h3>How do I get better outputs?</h3>
+    <p style="color:var(--text-muted);">
+      Better inputs. Add one real relevance hook.
+      Keep the objective singular.
+      Constraints like “under 90 words” beat “make it better.”
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>Can I customize tone and templates?</h3>
-        <p style="color:var(--text-muted)">
-          Yes. Define tone, message type, and objectives.
-          For consistency, reuse constraints that work.
-        </p>
-      </div>
+  <div class="card">
+    <h3>What should I put in “Additional context”?</h3>
+    <p style="color:var(--text-muted);">
+      Facts that increase relevance: timing, constraints, references,
+      or what the recipient actually cares about.
+      One or two strong details beat a paragraph of fluff.
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>What’s “message type”?</h3>
-        <p style="color:var(--text-muted)">
-          It tells GridForge how the message should behave:
-          Email is formal, LinkedIn is short, follow-ups assume context,
-          inbound replies are direct.
-        </p>
-      </div>
+  <div class="card">
+    <h3>What is “message type”?</h3>
+    <p style="color:var(--text-muted);">
+      It tells GridForge how the message should behave.
+      Email is more formal, LinkedIn is shorter,
+      follow-ups assume context, inbound replies are direct.
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>What should I put in “Additional context”?</h3>
-        <p style="color:var(--text-muted)">
-          Facts that increase relevance: timing, constraints, references.
-          One strong detail beats a paragraph of fluff.
-        </p>
-      </div>
+  <div class="card">
+    <h3>How does the Bulk Generator work?</h3>
+    <p style="color:var(--text-muted);">
+      You upload a CSV. Each row equals one recipient.
+      GridForge generates one message per row.
+      You export the results and send them using your own system.
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>How does Bulk Generator work?</h3>
-        <p style="color:var(--text-muted)">
-          Upload a CSV where each row is a recipient.
-          GridForge generates one message per row.
-        </p>
-      </div>
+  <div class="card">
+    <h3>What headers does Bulk require?</h3>
+    <p style="color:var(--text-muted);">
+      <strong>name, company, title, email, notes, industry, goals, messageType</strong>
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>What headers does Bulk require?</h3>
-        <p style="color:var(--text-muted)">
-          name, company, title, email, notes, industry, goals, messageType
-        </p>
-      </div>
+  <div class="card">
+    <h3>Why do bulk messages look generic?</h3>
+    <p style="color:var(--text-muted);">
+      Because the rows are generic.
+      Bulk works when <em>notes</em> include a real hook:
+      tool stack, hiring signal, expansion, or KPI pressure.
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>Does GridForge guarantee replies?</h3>
-        <p style="color:var(--text-muted)">
-          No. Nothing does. GridForge improves clarity and relevance.
-          Offer, targeting, and timing still matter.
-        </p>
-      </div>
+  <div class="card">
+    <h3>Does GridForge send emails for me?</h3>
+    <p style="color:var(--text-muted);">
+      No. GridForge generates drafts.
+      Sending is your responsibility.
+      If you automate delivery, do it properly.
+    </p>
+  </div>
 
-      <div class="card">
-        <h3>Is this “AI writing” detectable?</h3>
-        <p style="color:var(--text-muted)">
-          Only if it’s generic. Keep it short, specific, and human.
-          Long intros and corporate fluff are the giveaway.
-        </p>
-      </div>
+  <div class="card">
+    <h3>Do you store my data?</h3>
+    <p style="color:var(--text-muted);">
+      Treat GridForge like any outbound tool.
+      Don’t paste secrets or regulated data.
+      Keep inputs aligned with your own policies.
+    </p>
+  </div>
 
-    </div>
+  <div class="card">
+    <h3>Does GridForge guarantee replies?</h3>
+    <p style="color:var(--text-muted);">
+      No. Nothing does.
+      GridForge improves clarity and relevance.
+      Targeting, offer, and timing still matter.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Is AI-written outreach detectable?</h3>
+    <p style="color:var(--text-muted);">
+      Not when it’s short, specific, and grounded.
+      The giveaway is generic praise, long intros,
+      and over-polished corporate nonsense.
+    </p>
+  </div>
+
+</div>
+```
+
   </main>
+
+  <!-- FOOTER -->
 
   <footer>
     <div class="container">© <span id="year"></span> GridForge.</div>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
 </body>
 </html>
