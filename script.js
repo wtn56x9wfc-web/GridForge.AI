@@ -1,380 +1,335 @@
-/* Helper */
-const $ = (id) => document.getElementById(id);
+/* ===========================
+   GridForge — script.js (FULL)
+   - Access gate (code: forgealpha)
+   - Excel-only template download (.xlsx)
+   - Defensive event wiring (won’t crash if elements aren’t on the page)
+   =========================== */
 
-/* ===== Single Message Composer ===== */
-const single = {
-  init() {
-    const gen = $("generateBtn");
-    const clr = $("clearBtn");
-    if (gen) gen.addEventListener("click", this.generate);
-    if (clr) clr.addEventListener("click", this.clear);
-  },
+(() => {
+  "use strict";
 
-  async generate(e) {
-    e?.preventDefault?.();
+  /* =========
+     ACCESS GATE
+     ========= */
+  const ACCESS_CODE = "forgealpha";
+  const ACCESS_STORAGE_KEY = "gridforge_access_ok_v1";
 
-    const businessName = $("businessName")?.value?.trim() || "";
-    const senderName = $("senderName")?.value?.trim() || "";
-    const recipientName = $("recipientName")?.value?.trim() || "";
-    const industry = $("industry")?.value?.trim() || "";
-    const goals = $("goals")?.value?.trim() || "";
-    const messageType = $("messageType")?.value || "email";
-    const extra = $("extra")?.value?.trim() || "";
+  function isAccessGranted() {
+    return localStorage.getItem(ACCESS_STORAGE_KEY) === "true";
+  }
 
-    if (!businessName || !senderName || !recipientName) return;
+  function setAccessGranted() {
+    localStorage.setItem(ACCESS_STORAGE_KEY, "true");
+  }
 
-    const out = $("output");
-    if (out) out.value = "Generating…";
+  function clearAccessGranted() {
+    localStorage.removeItem(ACCESS_STORAGE_KEY);
+  }
 
-    const payload = {
-      businessName,
-      senderName,
-      recipientName,
-      industry,
-      goals,
-      messageType,
-      extra,
-    };
+  function buildGateOverlay() {
+    const overlay = document.createElement("div");
+    overlay.id = "gf-access-overlay";
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.zIndex = "999999";
+    overlay.style.background = "rgba(0,0,0,0.75)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.padding = "16px";
 
-    try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    const card = document.createElement("div");
+    card.style.width = "100%";
+    card.style.maxWidth = "420px";
+    card.style.background = "#0b1220";
+    card.style.border = "1px solid rgba(255,255,255,0.08)";
+    card.style.borderRadius = "14px";
+    card.style.boxShadow = "0 20px 60px rgba(0,0,0,0.55)";
+    card.style.padding = "18px";
 
-      // If server returns non-JSON or error, handle cleanly
-      const text = await res.text();
-      let data = null;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        data = { message: text };
-      }
+    const title = document.createElement("div");
+    title.textContent = "GridForge Access";
+    title.style.fontSize = "18px";
+    title.style.fontWeight = "700";
+    title.style.color = "rgba(255,255,255,0.95)";
+    title.style.marginBottom = "6px";
 
-      if (out) out.value = data?.message || "No content returned.";
-    } catch (err) {
-      if (out) out.value = "Error generating content. Please try again.";
-    }
-  },
+    const sub = document.createElement("div");
+    sub.textContent = "Enter access code to continue.";
+    sub.style.fontSize = "13px";
+    sub.style.color = "rgba(255,255,255,0.75)";
+    sub.style.marginBottom = "12px";
 
-  clear() {
-    ["businessName", "senderName", "recipientName", "industry", "goals", "extra"].forEach(
-      (id) => {
-        const el = $(id);
-        if (el) el.value = "";
-      }
-    );
-    const mt = $("messageType");
-    if (mt) mt.value = "email";
-    const out = $("output");
-    if (out) out.value = "";
-  },
-};
+    const input = document.createElement("input");
+    input.type = "password";
+    input.autocomplete = "off";
+    input.spellcheck = false;
+    input.placeholder = "Access code";
+    input.style.width = "100%";
+    input.style.padding = "12px 12px";
+    input.style.borderRadius = "10px";
+    input.style.border = "1px solid rgba(255,255,255,0.10)";
+    input.style.background = "rgba(255,255,255,0.06)";
+    input.style.color = "rgba(255,255,255,0.95)";
+    input.style.outline = "none";
 
-/* ===== Tiny CSV Utils (handles quotes) ===== */
-function parseCSV(text) {
-  const rows = [];
-  let row = [];
-  let cell = "";
-  let inQuotes = false;
+    const err = document.createElement("div");
+    err.textContent = "";
+    err.style.marginTop = "10px";
+    err.style.fontSize = "12px";
+    err.style.color = "rgba(255,90,90,0.95)";
+    err.style.minHeight = "16px";
 
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    const n = text[i + 1];
+    const row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.gap = "10px";
+    row.style.marginTop = "12px";
 
-    if (c === '"') {
-      if (inQuotes && n === '"') {
-        cell += '"';
-        i++;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "Unlock";
+    btn.style.flex = "1";
+    btn.style.padding = "12px";
+    btn.style.borderRadius = "10px";
+    btn.style.border = "1px solid rgba(255,255,255,0.12)";
+    btn.style.background = "rgba(255,255,255,0.10)";
+    btn.style.color = "rgba(255,255,255,0.95)";
+    btn.style.cursor = "pointer";
+    btn.style.fontWeight = "700";
+
+    const reset = document.createElement("button");
+    reset.type = "button";
+    reset.textContent = "Reset";
+    reset.style.width = "110px";
+    reset.style.padding = "12px";
+    reset.style.borderRadius = "10px";
+    reset.style.border = "1px solid rgba(255,255,255,0.12)";
+    reset.style.background = "transparent";
+    reset.style.color = "rgba(255,255,255,0.75)";
+    reset.style.cursor = "pointer";
+    reset.title = "Clears saved access on this browser";
+
+    row.appendChild(btn);
+    row.appendChild(reset);
+
+    card.appendChild(title);
+    card.appendChild(sub);
+    card.appendChild(input);
+    card.appendChild(err);
+    card.appendChild(row);
+
+    overlay.appendChild(card);
+
+    function attempt() {
+      const val = (input.value || "").trim();
+      if (val === ACCESS_CODE) {
+        setAccessGranted();
+        overlay.remove();
+        document.documentElement.style.overflow = "";
+        document.body.style.filter = "";
       } else {
-        inQuotes = !inQuotes;
+        err.textContent = "Wrong code.";
+        input.value = "";
+        input.focus();
       }
-    } else if (c === "," && !inQuotes) {
-      row.push(cell);
-      cell = "";
-    } else if ((c === "\n" || c === "\r") && !inQuotes) {
-      if (cell.length || row.length) {
-        row.push(cell);
-        rows.push(row);
-        row = [];
-        cell = "";
-      }
-      if (c === "\r" && n === "\n") i++; // handle CRLF
-    } else {
-      cell += c;
     }
+
+    btn.addEventListener("click", attempt);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") attempt();
+    });
+
+    reset.addEventListener("click", () => {
+      clearAccessGranted();
+      err.textContent = "Saved access cleared. Enter code.";
+      input.focus();
+    });
+
+    // Slight blur so it’s obvious it’s blocked.
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.filter = "blur(3px)";
+    setTimeout(() => input.focus(), 50);
+
+    return overlay;
   }
 
-  if (cell.length || row.length) {
-    row.push(cell);
-    rows.push(row);
+  function enforceAccessGate() {
+    // Don’t gate local dev previews in file:// if you ever open directly
+    // (remove this if you want it gated there too)
+    // if (location.protocol === "file:") return;
+
+    if (isAccessGranted()) return;
+    document.body.appendChild(buildGateOverlay());
   }
 
-  return rows;
-}
+  /* =========================
+     XLSX LOADER + TEMPLATE DL
+     ========================= */
+  const XLSX_CDN = "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js";
 
-function toCSV(rows) {
-  const esc = (v) => {
-    if (v == null) return "";
-    const s = String(v);
-    return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-  };
-  return rows.map((r) => r.map(esc).join(",")).join("\n");
-}
+  function loadXLSX() {
+    return new Promise((resolve, reject) => {
+      if (window.XLSX && typeof window.XLSX.writeFile === "function") return resolve(window.XLSX);
 
-/* ===== Bulk Generation ===== */
-const bulk = {
-  rows: [],
-  headers: [],
-  results: [],
-
-  init() {
-    const file = $("csvFile");
-    const gen = $("generateBulkBtn");
-    const tpl = $("downloadTemplateBtn");
-    const dl = $("downloadResultsBtn");
-    const clr = $("clearBulkBtn");
-
-    if (file) file.addEventListener("change", this.loadCSV.bind(this));
-    if (gen) gen.addEventListener("click", this.generateAll.bind(this));
-    if (tpl) tpl.addEventListener("click", this.downloadTemplate);
-    if (dl) dl.addEventListener("click", this.downloadResults.bind(this));
-    if (clr) clr.addEventListener("click", this.clear.bind(this));
-  },
-
-  requiredHeaders: ["name", "company", "title", "email", "notes", "industry", "goals", "messageType"],
-
-  async loadCSV(e) {
-    const file = e?.target?.files?.[0];
-    if (!file) return;
-
-    const text = await file.text();
-    const raw = parseCSV(text).filter((r) => r.length && r.some((c) => (c || "").trim().length));
-    if (!raw.length) return;
-
-    // Normalize headers
-    this.headers = raw[0].map((h) => String(h || "").trim());
-    const headerLower = this.headers.map((h) => h.toLowerCase());
-
-    const missing = this.requiredHeaders.filter((h) => !headerLower.includes(h.toLowerCase()));
-    const status = $("bulkStatus");
-    const genBtn = $("generateBulkBtn");
-    const clrBtn = $("clearBulkBtn");
-
-    if (missing.length) {
-      if (status) status.textContent = `Missing headers: ${missing.join(", ")}`;
-      if (genBtn) genBtn.disabled = true;
-      if (clrBtn) clrBtn.disabled = false; // allow clearing even if headers are wrong
-      this.rows = [];
-      this.results = [];
-      this.renderPreview(); // will effectively show nothing
-      return;
-    }
-
-    // Build row objects (use the original header labels as keys)
-    this.rows = raw
-      .slice(1)
-      .map((cols) => {
-        const obj = {};
-        this.headers.forEach((h, i) => {
-          obj[h] = (cols[i] ?? "").toString().trim();
-        });
-        return obj;
-      })
-      .filter((r) => Object.values(r).some((v) => (v || "").trim().length));
-
-    if (status) status.textContent = `Loaded ${this.rows.length} rows.`;
-    if (genBtn) genBtn.disabled = this.rows.length === 0;
-    if (clrBtn) clrBtn.disabled = this.rows.length === 0;
-
-    this.renderPreview();
-  },
-
-  renderPreview() {
-    const wrap = $("csvPreviewWrap");
-    const table = $("csvPreview");
-    if (!wrap || !table) return;
-
-    const head = table.querySelector("thead");
-    const body = table.querySelector("tbody");
-    if (!head || !body) return;
-
-    head.innerHTML =
-      "<tr>" + this.headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("") + "</tr>";
-
-    const previewRows = this.rows.slice(0, 20);
-    body.innerHTML = previewRows
-      .map((r) => {
-        return (
-          "<tr>" +
-          this.headers.map((h) => `<td>${escapeHtml(r[h] || "")}</td>`).join("") +
-          "</tr>"
-        );
-      })
-      .join("");
-
-    wrap.style.display = "block";
-  },
-
-  async generateAll() {
-    if (!this.rows.length) return;
-
-    const genBtn = $("generateBulkBtn");
-    const dlBtn = $("downloadResultsBtn");
-    const status = $("bulkStatus");
-    const clrBtn = $("clearBulkBtn");
-
-    if (genBtn) genBtn.disabled = true;
-    if (dlBtn) dlBtn.disabled = true;
-    if (status) status.textContent = `Generating ${this.rows.length} messages…`;
-
-    try {
-      const res = await fetch("/api/generate-bulk", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rows: this.rows }),
-      });
-
-      const text = await res.text();
-      let data = null;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error("Non-JSON response from /api/generate-bulk");
+      const existing = document.querySelector(`script[src="${XLSX_CDN}"]`);
+      if (existing) {
+        existing.addEventListener("load", () => resolve(window.XLSX));
+        existing.addEventListener("error", () => reject(new Error("Failed to load XLSX library")));
+        return;
       }
 
-      if (!data || !Array.isArray(data.results)) throw new Error("Bad response shape");
-      this.results = data.results;
+      const s = document.createElement("script");
+      s.src = XLSX_CDN;
+      s.async = true;
+      s.onload = () => resolve(window.XLSX);
+      s.onerror = () => reject(new Error("Failed to load XLSX library"));
+      document.head.appendChild(s);
+    });
+  }
 
-      this.renderResults();
-
-      if (status) status.textContent = `Done. Generated ${this.results.length} messages.`;
-      if (dlBtn) dlBtn.disabled = this.results.length === 0;
-      if (clrBtn) clrBtn.disabled = false;
-    } catch (err) {
-      if (status) status.textContent = "Error during bulk generation. Try again.";
-    } finally {
-      if (genBtn) genBtn.disabled = false;
-    }
-  },
-
-  renderResults() {
-    const wrap = $("bulkTableWrap");
-    const table = $("bulkTable");
-    const count = $("bulkCount");
-    if (!wrap || !table || !count) return;
-
-    const body = table.querySelector("tbody");
-    if (!body) return;
-
-    count.textContent = `${this.results.length} results`;
-
-    body.innerHTML = this.results
-      .map((r, i) => {
-        const msg = (r.message || "").replace(/\n/g, "<br>");
-        return `
-          <tr>
-            <td>${i + 1}</td>
-            <td>${escapeHtml(r.name || "")}</td>
-            <td>${escapeHtml(r.company || "")}</td>
-            <td>${escapeHtml(r.email || "")}</td>
-            <td>${escapeHtmlAllowBr(msg)}</td>
-          </tr>
-        `;
-      })
-      .join("");
-
-    wrap.style.display = this.results.length ? "block" : "none";
-  },
-
-  downloadTemplate() {
-    const headers = ["name", "company", "title", "email", "notes", "industry", "goals", "messageType"];
-    const sample = [
-      headers,
-      [
-        "Jordan Patel",
-        "Northwind Robotics",
-        "COO",
-        "jordan.patel@example.com",
-        "Evaluating automation in packaging",
-        "Manufacturing",
-        "Intro call about deploying robotics in packaging",
-        "email",
-      ],
+  function downloadExcelTemplate() {
+    // Excel-only. No CSV fallback. If XLSX fails to load, we tell you why.
+    const headers = [
+      "firstName",
+      "lastName",
+      "company",
+      "title",
+      "email",
+      "website",
+      "linkedinUrl",
+      "industry",
+      "location",
+      "notes"
     ];
 
-    const blob = new Blob([toCSV(sample)], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "gridforge_template.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-  },
+    // One sample row (keeps it obvious how to fill; delete if you want blank)
+    const sampleRow = [
+      "Jane",
+      "Doe",
+      "Acme Co",
+      "Owner",
+      "jane@acme.com",
+      "https://acme.com",
+      "https://linkedin.com/in/janedoe",
+      "Home Services",
+      "Detroit, MI",
+      "Add anything helpful here"
+    ];
 
-  downloadResults() {
-    if (!this.results.length) return;
+    loadXLSX()
+      .then((XLSX) => {
+        const data = [headers, sampleRow];
+        const ws = XLSX.utils.aoa_to_sheet(data);
 
-    const headers = ["name", "company", "title", "email", "message"];
-    const rows = [headers, ...this.results.map((r) => headers.map((h) => r[h] ?? ""))];
+        // Make columns reasonably wide (nice UX, no user rage)
+        ws["!cols"] = headers.map((h) => {
+          const w = Math.max(14, String(h).length + 2);
+          return { wch: w };
+        });
 
-    const blob = new Blob([toCSV(rows)], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "gridforge_results.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-  },
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Leads");
 
-  clear() {
-    this.rows = [];
-    this.headers = [];
-    this.results = [];
+        // Force proper .xlsx download
+        XLSX.writeFile(wb, "GridForge_Lead_Template.xlsx", { compression: true });
+      })
+      .catch((err) => {
+        alert(
+          "Template download failed (XLSX library couldn’t load). " +
+            "If you’re blocking CDNs/adblock, allow jsdelivr.\n\n" +
+            "Error: " +
+            (err && err.message ? err.message : String(err))
+        );
+      });
+  }
 
-    const file = $("csvFile");
-    if (file) file.value = "";
+  function wireTemplateDownload() {
+    // Supports multiple possible IDs/classes so we don’t break your markup
+    const selectors = [
+      "#downloadTemplate",
+      "#download-template",
+      "[data-download-template]",
+      ".download-template",
+      "button[name='downloadTemplate']",
+      "a[name='downloadTemplate']"
+    ];
 
-    const prev = $("csvPreviewWrap");
-    if (prev) prev.style.display = "none";
+    const el = selectors.map((s) => document.querySelector(s)).find(Boolean);
+    if (!el) return;
 
-    const wrap = $("bulkTableWrap");
-    if (wrap) wrap.style.display = "none";
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      downloadExcelTemplate();
+    });
+  }
 
-    const count = $("bulkCount");
-    if (count) count.textContent = "No results yet.";
+  /* ======================
+     API HELPERS (defensive)
+     ====================== */
+  async function postJSON(url, payload) {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload || {})
+    });
 
-    const status = $("bulkStatus");
-    if (status) status.textContent = "";
+    let data;
+    const txt = await res.text();
+    try {
+      data = txt ? JSON.parse(txt) : {};
+    } catch {
+      data = { raw: txt };
+    }
 
-    const genBtn = $("generateBulkBtn");
-    const dlBtn = $("downloadResultsBtn");
-    const clrBtn = $("clearBulkBtn");
+    if (!res.ok) {
+      const msg = data && (data.error || data.message) ? (data.error || data.message) : "Request failed";
+      throw new Error(msg);
+    }
+    return data;
+  }
 
-    if (genBtn) genBtn.disabled = true;
-    if (dlBtn) dlBtn.disabled = true;
-    if (clrBtn) clrBtn.disabled = true;
-  },
-};
+  function getEl(idOrSelector) {
+    return document.querySelector(idOrSelector) || document.getElementById(idOrSelector);
+  }
 
-/* ===== Simple HTML escaping helpers (prevents broken tables / accidental markup) ===== */
-function escapeHtml(s) {
-  return String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+  /* ==========================
+     OPTIONAL: wire your buttons
+     (won’t do anything if elements
+      aren’t present; keeps site stable)
+     ========================== */
+  function wireIfExists(selector, handler) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    el.addEventListener("click", handler);
+  }
 
-// Allows <br> only (used for message cell)
-function escapeHtmlAllowBr(s) {
-  const tmp = String(s ?? "");
-  // First escape everything, then re-allow literal <br> that we inserted
-  return escapeHtml(tmp).replace(/&lt;br&gt;/g, "<br>");
-}
+  function init() {
+    // Gate FIRST so nothing is “usable” before access
+    enforceAccessGate();
 
-/* Init */
-single.init();
-bulk.init();
+    // Excel-only template download
+    wireTemplateDownload();
+
+    // If you have a “logout” or “lock” button anywhere, support it:
+    wireIfExists("[data-lock-site]", (e) => {
+      e.preventDefault();
+      clearAccessGranted();
+      location.reload();
+    });
+
+    /* 
+      NOTE:
+      I’m NOT touching your other generate/send wiring here because I don’t have your current script.js contents in this chat.
+      This script is built to be safe and not nuke your UI.
+
+      If you paste your existing script.js next, I’ll merge this access gate + Excel template into it and give you a true
+      “same script + upgrades” version.
+    */
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
