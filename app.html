@@ -5,12 +5,31 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GridForge App</title>
   <meta name="description" content="Compose and refine professional outreach. Bulk generation from CSV included." />
+
+  <script>
+    (function () {
+      const KEY = "forgealpha";
+      const FLAG = "gf_access_ok";
+
+      try {
+        if (sessionStorage.getItem(FLAG) === "1") return;
+
+        const entered = prompt("Access key required:");
+        if (!entered || entered.trim() !== KEY) throw new Error("denied");
+
+        sessionStorage.setItem(FLAG, "1");
+      } catch (e) {
+        document.documentElement.style.display = "none";
+        location.replace("https://google.com");
+      }
+    })();
+  </script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-  <!-- NAV -->
   <nav class="navbar">
     <div class="container inner">
       <div class="nav-logo">Grid<strong><span>Forge</span></strong></div>
@@ -22,7 +41,6 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <header class="hero">
     <h1>Compose with clarity and control</h1>
     <p>
@@ -33,7 +51,6 @@
 
   <main class="container section" style="padding-top:20px;">
 
-    <!-- SINGLE DRAFT -->
     <div class="card">
       <h2 style="margin-bottom:10px;">Single Draft</h2>
 
@@ -85,7 +102,6 @@
       </form>
     </div>
 
-    <!-- BULK GENERATOR -->
     <div class="card" style="margin-top:22px;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
         <h2 style="margin:0;">Bulk Generator</h2>
@@ -127,7 +143,6 @@
       </div>
     </div>
 
-    <!-- BULK RESULTS -->
     <div class="card" style="margin-top:22px;">
       <h3 style="margin-bottom:10px;">Bulk Results</h3>
       <div id="bulkCount" style="color:var(--text-muted);margin-bottom:8px;">
@@ -150,7 +165,6 @@
       </div>
     </div>
 
-    <!-- SINGLE OUTPUT -->
     <div class="card" style="margin-top:22px;">
       <h3 style="margin-bottom:10px;">Draft</h3>
       <textarea id="output" placeholder="Your draft will appear here…" readonly></textarea>
@@ -166,7 +180,7 @@
 
   <script src="script.js"></script>
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 
 </body>
