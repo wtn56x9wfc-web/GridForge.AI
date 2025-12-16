@@ -10,21 +10,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const bulkStatus = document.getElementById("bulkStatus");
 
   generateBtn.onclick = () => {
-    const business = document.getElementById("businessName").value;
-    const sender = document.getElementById("senderName").value;
-    const recipient = document.getElementById("recipientName").value;
-    const goals = document.getElementById("goals").value;
-    const extra = document.getElementById("extra").value;
+    const business = businessName.value.trim();
+    const sender = senderName.value.trim();
+    const recipient = recipientName.value.trim();
+    const industry = industry.value.trim();
+    const goals = goals.value.trim();
+    const extra = extra.value.trim();
+    const type = messageType.value;
+
+    let opener = "";
+    if (industry) {
+      opener = `Noticed you're working in ${industry}.`;
+    }
+
+    let body = extra || goals || "Thought this might be relevant.";
+
+    let close =
+      type === "linkedin"
+        ? "Worth a quick chat?"
+        : "Open to a short conversation?";
 
     output.style.display = "block";
-    output.textContent =
-`Hi ${recipient},
+    output.textContent = 
+`${recipient},
 
-Quick note — I’m ${sender} from ${business}.
+${opener}
 
-${extra || goals}
+${body}
 
-Worth a quick chat?
+${close}
 
 – ${sender}`;
   };
@@ -45,6 +59,6 @@ Worth a quick chat?
   };
 
   generateBulkBtn.onclick = () => {
-    bulkStatus.textContent = "Bulk generation wired. Backend next.";
+    bulkStatus.textContent = "Bulk logic ready. API next.";
   };
 });
