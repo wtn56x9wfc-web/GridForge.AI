@@ -1,5 +1,4 @@
 // script.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("composer");
   const output = document.getElementById("output");
@@ -10,52 +9,42 @@ document.addEventListener("DOMContentLoaded", () => {
   const generateBulkBtn = document.getElementById("generateBulkBtn");
   const bulkStatus = document.getElementById("bulkStatus");
 
-  generateBtn.addEventListener("click", () => {
-    const data = {
-      business: businessName.value,
-      sender: senderName.value,
-      recipient: recipientName.value,
-      industry: industry.value,
-      goals: goals.value,
-      type: messageType.value,
-      extra: extra.value
-    };
+  generateBtn.onclick = () => {
+    const business = document.getElementById("businessName").value;
+    const sender = document.getElementById("senderName").value;
+    const recipient = document.getElementById("recipientName").value;
+    const goals = document.getElementById("goals").value;
+    const extra = document.getElementById("extra").value;
 
     output.style.display = "block";
-    output.textContent = `Hi ${data.recipient},
+    output.textContent =
+`Hi ${recipient},
 
-Quick note — I’m ${data.sender} from ${data.business}.
+Quick note — I’m ${sender} from ${business}.
 
-${data.extra || data.goals}
+${extra || goals}
 
 Worth a quick chat?
 
-– ${data.sender}`;
-  });
+– ${sender}`;
+  };
 
-  clearBtn.addEventListener("click", () => {
+  clearBtn.onclick = () => {
     form.reset();
     output.style.display = "none";
-  });
+  };
 
-  downloadTemplateBtn.addEventListener("click", () => {
+  downloadTemplateBtn.onclick = () => {
     const csv =
-      "name,company,title,email,notes,industry,goals,messageType\n";
+"name,company,title,email,notes,industry,goals,messageType\n";
     const blob = new Blob([csv], { type: "text/csv" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "gridforge_template.csv";
     a.click();
-  });
+  };
 
-  generateBulkBtn.addEventListener("click", () => {
-    bulkStatus.textContent = "Bulk generation ready. Backend/API next.";
-  });
-
-  const csvFile = document.getElementById("csvFile");
-  csvFile.addEventListener("change", () => {
-    if (csvFile.files.length > 0) {
-      generateBulkBtn.disabled = false;
-    }
-  });
+  generateBulkBtn.onclick = () => {
+    bulkStatus.textContent = "Bulk generation wired. Backend next.";
+  };
 });
