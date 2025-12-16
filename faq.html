@@ -1,12 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <style>html{display:none !important;}</style>
+
+  <script>
+    (function () {
+      const ACCESS_KEY = "forgealpha";
+      const FLAG = "gf_unlocked_v1";
+
+      if (localStorage.getItem(FLAG) === "1") {
+        document.documentElement.style.display = "";
+        return;
+      }
+
+      const entered = prompt("Access key required:");
+      if (!entered || entered.trim() !== ACCESS_KEY) {
+        location.replace("https://google.com");
+        return;
+      }
+
+      localStorage.setItem(FLAG, "1");
+      document.documentElement.style.display = "";
+    })();
+  </script>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GridForge — FAQ</title>
   <meta name="description" content="Clear answers to common questions." />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <nav class="navbar">
     <div class="container inner">
@@ -46,16 +70,16 @@
       <div class="card">
         <h3>Is it only for email?</h3>
         <p style="color:var(--text-muted)">
-          No. Email, LinkedIn DMs, follow-ups, and inbound replies are supported. The structure adapts,
-          but the rules stay the same: relevance + clarity + a clear ask.
+          No. Email, LinkedIn DMs, follow-ups, and inbound replies are supported.
+          The structure adapts, but the rules stay the same: relevance + clarity + a clear ask.
         </p>
       </div>
 
       <div class="card">
         <h3>How do I get better outputs?</h3>
         <p style="color:var(--text-muted)">
-          Better inputs. Add one specific relevance hook, keep constraints clear, and don’t ask for five things at once.
-          “More detail” is useless. “Keep it under 90 words and ask for 15 minutes” is useful.
+          Better inputs. Add one specific relevance hook, keep constraints clear,
+          and don’t ask for five things at once.
         </p>
       </div>
 
@@ -70,8 +94,8 @@
       <div class="card">
         <h3>Can I customize tone and templates?</h3>
         <p style="color:var(--text-muted)">
-          Yes. You can define tone, message type, and objectives. If you want consistent voice across a team,
-          standardize constraints and reuse winning templates.
+          Yes. Define tone, message type, and objectives.
+          For consistency, reuse constraints that work.
         </p>
       </div>
 
@@ -79,24 +103,24 @@
         <h3>What’s “message type”?</h3>
         <p style="color:var(--text-muted)">
           It tells GridForge how the message should behave:
-          Email is more formal, LinkedIn is shorter, follow-ups assume prior context,
-          inbound replies are responsive and direct.
+          Email is formal, LinkedIn is short, follow-ups assume context,
+          inbound replies are direct.
         </p>
       </div>
 
       <div class="card">
         <h3>What should I put in “Additional context”?</h3>
         <p style="color:var(--text-muted)">
-          Facts that increase relevance: timing, constraints, a reference point, or what the recipient cares about.
-          Avoid fluff. One or two strong details beats a paragraph of vibes.
+          Facts that increase relevance: timing, constraints, references.
+          One strong detail beats a paragraph of fluff.
         </p>
       </div>
 
       <div class="card">
         <h3>How does Bulk Generator work?</h3>
         <p style="color:var(--text-muted)">
-          Upload a CSV where each row is a recipient. GridForge generates one message per row.
-          Then you export results and send via your outbound system.
+          Upload a CSV where each row is a recipient.
+          GridForge generates one message per row.
         </p>
       </div>
 
@@ -108,42 +132,18 @@
       </div>
 
       <div class="card">
-        <h3>Why do my bulk messages look generic?</h3>
-        <p style="color:var(--text-muted)">
-          Because your rows are generic. Bulk works when “notes” includes a real hook
-          (tool stack, hiring signal, expansion, product launch, KPI pressure).
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Can I send directly from GridForge?</h3>
-        <p style="color:var(--text-muted)">
-          You can generate drafts at scale and export them. If you add sending, do it responsibly:
-          verified domains, deliverability basics, and opt-out compliance where required.
-        </p>
-      </div>
-
-      <div class="card">
         <h3>Does GridForge guarantee replies?</h3>
         <p style="color:var(--text-muted)">
-          No. Nothing does. GridForge increases the odds by improving clarity and relevance.
-          Offer + targeting + timing still matter.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>What’s the best “first message” structure?</h3>
-        <p style="color:var(--text-muted)">
-          One sentence of relevance, one sentence of value, one clear ask, one easy-out close.
-          If your message needs scrolling, it’s already losing.
+          No. Nothing does. GridForge improves clarity and relevance.
+          Offer, targeting, and timing still matter.
         </p>
       </div>
 
       <div class="card">
         <h3>Is this “AI writing” detectable?</h3>
         <p style="color:var(--text-muted)">
-          Not if you keep it short, specific, and human. The giveaway is generic praise,
-          long intros, and over-polished corporate nonsense. Keep it real.
+          Only if it’s generic. Keep it short, specific, and human.
+          Long intros and corporate fluff are the giveaway.
         </p>
       </div>
 
