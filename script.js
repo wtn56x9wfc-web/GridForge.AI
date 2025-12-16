@@ -1,78 +1,205 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("composer");
-  const output = document.getElementById("output");
+  const $ = (id) => document.getElementById(id);
 
-  const generateBtn = document.getElementById("generateBtn");
-  const clearBtn = document.getElementById("clearBtn");
+  const form = $("composer");
+  const output = $("output");
 
-  const csvFile = document.getElementById("csvFile");
-  const downloadTemplateBtn = document.getElementById("downloadTemplateBtn");
-  const generateBulkBtn = document.getElementById("generateBulkBtn");
-  const bulkStatus = document.getElementById("bulkStatus");
+  const generateBtn = $("generateBtn");
+  const clearBtn = $("clearBtn");
+
+  const csvFile = $("csvFile");
+  const downloadTemplateBtn = $("downloadTemplateBtn");
+  const generateBulkBtn = $("generateBulkBtn");
+  const bulkStatus = $("bulkStatus");
+
+  const businessEl = $("businessName");
+  const senderEl = $("senderName");
+  const recipientEl = $("recipientName");
+  const industryEl = $("industry");
+  const goalsEl = $("goals");
+  const typeEl = $("messageType");
+  const extraEl = $("extra");
+
+  function stablePick(options, seedStr) {
+    let hash = 0;
+    for (let i = 0; i < seedStr.length; i++) {
+      hash = (hash * 31 + seedStr.charCodeAt(i)) >>> 0;
+    }
+    return options[hash % options.length];
+  }
+
+  function safeTrim(v) {
+    return (v || "").toString().trim();
+  }
+
+  function showOutput(text) {
+    output.style.display = "block";
+    output.value = text; // textarea needs value, not textContent
+  }
+
+  function buildEmail({ business, sender, recipient, industry, goals, extra, seed }) {
+    const subjects = [
+      `Quick question, ${recipient}`,
+      `${business} x ${recipient}`,
+      `Idea for ${industry || "your team"}`,
+      `2-minute question`,
+      `Not sure if this is relevant`
+    ];
+
+    const openers = [
+      `Hi ${recipient},`,
+      `Hey ${recipient},`,
+      `${recipient} — quick note.`
+    ];
+
+    const firstLines = [
+      `I’m ${sender} with ${business}.`,
+      `${sender} here from ${business}.`,
+      `My name’s ${sender} — reaching out from ${business}.`
+    ];
+
+    const middle =
+      goals
+        ? `Reason I’m reaching out: ${goals}.`
+        : industry
+        ? `We work with teams in ${industry}.`
+        : `I think there may be a fit based on what you do.`;
+
+    const valueLines = [
+      `If it makes sense, I can send a 3-bullet summary and you can tell me if it’s worth a call.`,
+      `Happy to send context first so you’re not wasting time on a call.`,
+      `If you want, I’ll send a quick breakdown and you can decide if it’s relevant.`
+    ];
+
+    const closes = [
+      `Open to a quick 10 minutes this week?`,
+      `Worth a short call, or should I send the summary instead?`,
+      `Want me to send the quick rundown?`
+    ];
+
+    const subject = stablePick(subjects, seed + "s");
+    const opener = stablePick(openers, seed + "o");
+    const first = stablePick(firstLines, seed + "f");
+    const value = stablePick(valueLines, seed + "v");
+    const close = stablePick(closes, seed + "c");
+
+    if (extra) {
+      return `Subject: ${subject}\n\n${opener}\n\n${extra}\n\n${close}\n\n– ${sender}`;
+    }
+
+    return `Subject: ${subject}\n\n${opener}\n\n${first} ${middle}\n\n${value}\n\n${close}\n\n– ${sender}`;
+  }
+
+  function buildLinkedIn({ business, sender, recipient, industry, goals, extra, seed }) {
+    const openers = [
+      `Hey ${recipient} — quick note.`,
+      `${recipient} — quick question.`,
+      `Hey ${recipient}, hope your day’s going well.`
+    ];
+
+    const bodies = [
+      `I’m ${sender} with ${business}. ${goals ? `We help with ${goals}.` : "Wanted to see if this is on your radar."}`,
+      `${sender} here from ${business}. ${industry ? `We work with teams in ${industry}.` : ""} ${goals ? `The goal is ${goals}.` : ""}`.trim(),
+      `I run outreach at ${business}. ${goals ? `We’re focused on ${goals}.` : "Trying to connect with the right person."}`
+    ];
+
+    const closes = [
+      `Are you the right person to ask about this?`,
+      `If you’re not the right contact, who should I talk to?`,
+      `Want me to send a quick 2–3 line summary?`
+    ];
+
+    const opener = stablePick(openers, seed + "o");
+    const body = extra || stablePick(bodies, seed + "b");
+    const close = stablePick(closes, seed + "c");
+
+    return `${opener}\n\n${body}\n\n${close}\n\n– ${sender}`;
+  }
+
+  function buildFollowUp({ sender, recipient, goals, extra, seed }) {
+    const openers = [
+      `Hi ${recipient} — quick follow-up.`,
+      `Hey ${recipient}, circling back.`,
+      `${recipient}, bumping this in case it got buried.`
+    ];
+
+    const bodies = [
+      goals ? `Still interested in ${goals}, if this is a priority right now.` : `Just wanted to see if this is worth a look.`,
+      `Totally fine if timing’s off — just trying to get you the right info.`,
+      `If it’s a “not now,” I can circle back later.`
+    ];
+
+    const closes = [
+      `Should I close the loop, or is this worth a quick chat?`,
+      `Want me to send the short summary instead of doing a call?`,
+      `What’s the right next step on your end?`
+    ];
+
+    const opener = stablePick(openers, seed + "o");
+    const body = extra || stablePick(bodies, seed + "b");
+    const close = stablePick(closes, seed + "c");
+
+    return `${opener}\n\n${body}\n\n${close}\n\n– ${sender}`;
+  }
+
+  function buildInboundReply({ business, sender, recipient, extra, seed }) {
+    const openers = [
+      `Hey ${recipient} — thanks for reaching out.`,
+      `Hi ${recipient}, appreciate the note.`,
+      `Hey ${recipient}, good to connect.`
+    ];
+
+    const bodies = [
+      `Happy to share more about ${business}. What outcome are you aiming for right now?`,
+      `Quick question so I don’t waste your time: what are you trying to solve?`,
+      `Before I send details, what’s the main priority on your side?`
+    ];
+
+    const closes = [
+      `If you answer that, I’ll send the most relevant next step.`,
+      `Once I know that, I can share a clean plan.`,
+      `From there I can suggest the best path.`
+    ];
+
+    const opener = stablePick(openers, seed + "o");
+    const body = extra || stablePick(bodies, seed + "b");
+    const close = stablePick(closes, seed + "c");
+
+    return `${opener}\n\n${body}\n\n${close}\n\n– ${sender}`;
+  }
 
   function generateDraft() {
-    const business = businessName.value.trim();
-    const sender = senderName.value.trim();
-    const recipient = recipientName.value.trim();
-    const industry = industry.value.trim();
-    const goals = goals.value.trim();
-    const extraText = extra.value.trim();
-    const type = messageType.value;
+    const business = safeTrim(businessEl?.value);
+    const sender = safeTrim(senderEl?.value);
+    const recipient = safeTrim(recipientEl?.value);
+    const industry = safeTrim(industryEl?.value);
+    const goals = safeTrim(goalsEl?.value);
+    const extra = safeTrim(extraEl?.value);
+    const type = safeTrim(typeEl?.value);
 
-    // Basic required fields check (so it doesn't "do nothing")
     if (!business || !sender || !recipient) {
-      output.style.display = "block";
-      output.textContent = "Fill Business name, Sender name, and Recipient name first.";
+      showOutput("Fill Business name, Your name, and Recipient name first.");
       return;
     }
 
-    let opener = "";
-    let body = "";
-    let close = "";
+    const seed = `${business}|${sender}|${recipient}|${industry}|${goals}|${type}`;
 
-    if (type === "email") {
-      opener = `Hi ${recipient},`;
-      body =
-        extraText ||
-        `I’m ${sender} from ${business}. ${
-          industry ? `We work with teams in ${industry}.` : ""
-        } ${goals || ""}`.trim();
-      close = "Open to a quick conversation?";
-    } else if (type === "linkedin") {
-      opener = `${recipient} — quick note.`;
-      body = extraText || `${sender} here from ${business}. ${goals || ""}`.trim();
-      close = "Worth a short chat?";
-    } else if (type === "followup") {
-      opener = `Hi ${recipient}, just circling back.`;
-      body =
-        extraText ||
-        `Wanted to follow up on my last note${goals ? ` about ${goals}` : ""}.`;
-      close = "Let me know either way.";
-    } else if (type === "inbound-reply") {
-      opener = `Hey ${recipient},`;
-      body = extraText || `Thanks for reaching out — happy to share more about ${business}.`;
-      close = "What’s the best next step?";
-    } else {
-      // Fallback for any unexpected value
-      opener = `Hi ${recipient},`;
-      body = extraText || `${sender} from ${business}. ${goals || ""}`.trim();
-      close = "Open to a quick chat?";
-    }
+    let text = "";
+    if (type === "email") text = buildEmail({ business, sender, recipient, industry, goals, extra, seed });
+    else if (type === "linkedin") text = buildLinkedIn({ business, sender, recipient, industry, goals, extra, seed });
+    else if (type === "followup") text = buildFollowUp({ sender, recipient, goals, extra, seed });
+    else if (type === "inbound-reply") text = buildInboundReply({ business, sender, recipient, extra, seed });
+    else text = buildEmail({ business, sender, recipient, industry, goals, extra, seed });
 
-    output.style.display = "block";
-    output.textContent = `${opener}
-
-${body}
-
-${close}
-
-– ${sender}`;
+    showOutput(text);
   }
 
-  // ✅ Generate button actually does something now
-  generateBtn.addEventListener("click", generateDraft);
+  // NEVER submit the form / reload
+  generateBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    generateDraft();
+  });
 
-  // Optional: allow Enter to generate too
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     generateDraft();
@@ -81,12 +208,16 @@ ${close}
   clearBtn.addEventListener("click", () => {
     form.reset();
     output.style.display = "none";
-    output.textContent = "";
+    output.value = "";
+    bulkStatus.textContent = "";
+    generateBulkBtn.disabled = !(csvFile.files && csvFile.files.length);
   });
 
   downloadTemplateBtn.addEventListener("click", () => {
-    const csv = "name,company,title,email,notes,industry,goals,messageType\n";
-    const blob = new Blob([csv], { type: "text/csv" });
+    const csv =
+      "name,company,title,email,notes,industry,goals,messageType\n" +
+      "John Doe,Acme Inc,VP Sales,john@acme.com,Met at event,Manufacturing,book more demos,email\n";
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "gridforge_template.csv";
@@ -94,13 +225,12 @@ ${close}
     URL.revokeObjectURL(a.href);
   });
 
-  // Enable bulk button when a CSV is chosen
   csvFile.addEventListener("change", () => {
     generateBulkBtn.disabled = !(csvFile.files && csvFile.files.length);
     bulkStatus.textContent = "";
   });
 
   generateBulkBtn.addEventListener("click", () => {
-    bulkStatus.textContent = "Bulk wiring works. Backend/API next.";
+    bulkStatus.textContent = "Bulk generation UI is wired. To generate per-row from CSV, hook this to an /api endpoint next.";
   });
 });
