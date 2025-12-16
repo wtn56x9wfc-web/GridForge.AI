@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GridForge App</title>
-  <meta name="description" content="Compose and refine professional outreach. Bulk generation from CSV included." />
+  <style>html{display:none !important;}</style>
 
   <script>
     (function () {
-      const KEY = "forgealpha";
-      const FLAG = "gf_access_ok";
+      const ACCESS_KEY = "forgealpha";
+      const FLAG = "gf_unlocked_v1";
 
       try {
-        if (sessionStorage.getItem(FLAG) === "1") return;
+        if (localStorage.getItem(FLAG) === "1") {
+          document.documentElement.style.display = "";
+          return;
+        }
 
         const entered = prompt("Access key required:");
-        if (!entered || entered.trim() !== KEY) throw new Error("denied");
+        if (!entered || entered.trim() !== ACCESS_KEY) {
+          location.replace("https://google.com");
+          return;
+        }
 
-        sessionStorage.setItem(FLAG, "1");
+        localStorage.setItem(FLAG, "1");
+        document.documentElement.style.display = "";
       } catch (e) {
-        document.documentElement.style.display = "none";
         location.replace("https://google.com");
       }
     })();
   </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GridForge App</title>
+  <meta name="description" content="Compose and refine professional outreach. Bulk generation from CSV included." />
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -134,54 +142,4 @@
       <div id="bulkStatus" style="margin-top:12px;color:var(--text-muted);"></div>
 
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
-        <button class="btn-secondary" id="downloadResultsBtn" type="button" disabled>
-          Download Results CSV
-        </button>
-        <button class="btn-secondary" id="clearBulkBtn" type="button" disabled>
-          Clear Bulk
-        </button>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:22px;">
-      <h3 style="margin-bottom:10px;">Bulk Results</h3>
-      <div id="bulkCount" style="color:var(--text-muted);margin-bottom:8px;">
-        No results yet.
-      </div>
-
-      <div id="bulkTableWrap" class="table-wrap" style="display:none;">
-        <table id="bulkTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Company</th>
-              <th>Email</th>
-              <th>Message</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:22px;">
-      <h3 style="margin-bottom:10px;">Draft</h3>
-      <textarea id="output" placeholder="Your draft will appear here…" readonly></textarea>
-    </div>
-
-  </main>
-
-  <footer>
-    <div class="container">
-      © <span id="year"></span> GridForge.
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-
-</body>
-</html>
+        <button class="btn-secondary" id="downloadResultsBtn" type="button
